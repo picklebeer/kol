@@ -203,7 +203,7 @@ async function buildRegisterPlayerTx(walletPubkey) {
     const ix = new solanaWeb3.TransactionInstruction({
         programId: PROGRAM_ID,
         keys,
-        data: Buffer.from(disc),
+        data: new Uint8Array(disc),
     });
 
     const tx = new solanaWeb3.Transaction().add(ix);
@@ -312,7 +312,7 @@ async function buildWithdrawTx(walletPubkey) {
     const ix = new solanaWeb3.TransactionInstruction({
         programId: PROGRAM_ID,
         keys,
-        data: Buffer.from(disc),
+        data: new Uint8Array(disc),
     });
 
     const tx = new solanaWeb3.Transaction().add(ix);
