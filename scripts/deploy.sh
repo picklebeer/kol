@@ -27,7 +27,7 @@ DOMAIN=""
 EMAIL=""
 APP_PORT=9000
 APP_USER="kol"
-APP_DIR="/opt/kol"
+APP_DIR="/var/www/kol"
 
 usage() {
     echo "Usage: sudo $0 --domain <domain> --email <email> [--port <port>]"
