@@ -143,36 +143,18 @@ async function submitChallenge() {
         return;
     }
 
-    // Try on-chain first, fall back to API
+    // On-chain drill — tokens are transferred via smart contract
     try {
-        if (typeof contractDrill === 'function') {
-            const result = await contractDrill(challengeTarget, stake);
-            // On-chain drill returns tx signature; show pending then refresh
-            showResult({ outcome: 'pending', signature: result.signature, stake_amount: stake, roll: '...' });
-            // Notify backend to sync immediately, then refresh UI
-            try { await syncTransaction(result.signature); } catch {}
-            await loadPipeline();
-            await loadLeaderboard();
-            if (walletAddress) await loadPlayerData(walletAddress);
-            return;
-        }
-    } catch (err) {
-        console.warn('[KOL] On-chain drill failed, trying API fallback:', err);
-    }
-
-    // API fallback
-    const clientSeed = Array.from(crypto.getRandomValues(new Uint8Array(16)))
-        .map(b => b.toString(16).padStart(2, '0')).join('');
-
-    try {
-        const result = await submitChallengeAPI(walletAddress, challengeTarget, stake, clientSeed);
-        showResult(result);
-
+        const result = await contractDrill(challengeTarget, stake);
+        showResult({ outcome: 'pending', signature: result.signature, stake_amount: stake, roll: '...' });
+        // Sync backend DB with on-chain state
+        try { await syncTransaction(result.signature); } catch {}
         await loadPipeline();
         await loadLeaderboard();
         if (walletAddress) await loadPlayerData(walletAddress);
     } catch (err) {
-        alert(err.message);
+        console.error('[KOL] Drill failed:', err);
+        alert('Drill failed: ' + (err.message || err));
     }
 }
 
