@@ -396,10 +396,73 @@ async function contractDrill(rank, stakeAmount) {
 
     console.log('[KOL] Drill TX confirmed:', sig);
 
-    return {
-        signature: sig,
-        outcome: 'pending',
-    };
+    // Parse the DrillResult event from transaction logs
+    const result = await parseDrillResult(sig, stakeAmount);
+    return result;
+}
+
+async function parseDrillResult(sig, stakeAmount) {
+    const conn = getSolConnection();
+
+    // RPC may not have indexed the TX immediately after confirmation — retry up to 3 times
+    let txInfo = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+        txInfo = await conn.getTransaction(sig, { commitment: 'confirmed', maxSupportedTransactionVersion: 0 });
+        if (txInfo) break;
+        await new Promise(r => setTimeout(r, 2000));
+    }
+
+    // Default result
+    const result = { signature: sig, stake_amount: stakeAmount };
+
+    if (!txInfo?.meta?.logMessages) {
+        result.outcome = 'pending';
+        return result;
+    }
+
+    // Look for the Anchor event data in "Program data:" log line
+    const dataLog = txInfo.meta.logMessages.find(l => l.startsWith('Program data:'));
+    if (dataLog) {
+        try {
+            const b64 = dataLog.replace('Program data: ', '');
+            const raw = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+
+            // DrillResult layout after 8-byte event discriminator:
+            // challenger: 32, rank: 1, stake_amount: 8, roll: 2, win_threshold: 2,
+            // outcome string (4-byte len + utf8), payout: 8, seed_hash: 32, timestamp: 8
+            const view = new DataView(raw.buffer, raw.byteOffset);
+            let off = 8; // skip event discriminator
+            off += 32;   // skip challenger pubkey
+            const rankResult = raw[off]; off += 1;
+            const stakeResult = Number(view.getBigUint64(off, true)) / Math.pow(10, TOKEN_DECIMALS); off += 8;
+            const roll = view.getUint16(off, true); off += 2;
+            const winThreshold = view.getUint16(off, true); off += 2;
+
+            // Borsh string: 4-byte length + utf8 bytes
+            const strLen = view.getUint32(off, true); off += 4;
+            const outcomeStr = new TextDecoder().decode(raw.slice(off, off + strLen)); off += strLen;
+
+            const payout = Number(view.getBigUint64(off, true)) / Math.pow(10, TOKEN_DECIMALS); off += 8;
+            const seedHash = Array.from(raw.slice(off, off + 32)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+            result.outcome = outcomeStr === 'win' ? 'win' : 'lose';
+            result.roll = roll;
+            result.win_threshold = winThreshold;
+            result.payout = payout;
+            result.stake_amount = stakeResult;
+            result.server_seed_hash = seedHash;
+            result.server_seed = '';
+
+            console.log('[KOL] Drill result:', outcomeStr, 'roll:', roll, '/', winThreshold);
+        } catch (err) {
+            console.warn('[KOL] Failed to parse DrillResult event:', err);
+            result.outcome = 'pending';
+        }
+    } else {
+        result.outcome = 'pending';
+    }
+
+    return result;
 }
 
 async function contractWithdraw() {

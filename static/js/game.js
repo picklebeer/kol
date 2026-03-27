@@ -146,7 +146,7 @@ async function submitChallenge() {
     // On-chain drill — tokens are transferred via smart contract
     try {
         const result = await contractDrill(challengeTarget, stake);
-        showResult({ outcome: 'pending', signature: result.signature, stake_amount: stake, roll: '...' });
+        showResult(result);
         // Sync backend DB with on-chain state
         try { await syncTransaction(result.signature); } catch {}
         await loadPipeline();
