@@ -375,35 +375,30 @@ async function contractDrill(rank, stakeAmount) {
     if (!connectedWallet || !walletAddress) throw new Error('Wallet not connected');
 
     const walletPubkey = new solanaWeb3.PublicKey(walletAddress);
+    const conn = getSolConnection();
 
-    // Ensure player is registered
-    try {
-        const [playerPDA] = await findPlayerPDA(walletPubkey);
-        const conn = getSolConnection();
-        const playerInfo = await conn.getAccountInfo(playerPDA);
-        if (!playerInfo) {
-            const regTx = await buildRegisterPlayerTx(walletPubkey);
-            await signAndSendTransaction(regTx);
-        }
-    } catch (err) {
-        console.warn('[KOL] Player registration check failed:', err);
+    // Ensure player is registered on-chain (required before drill)
+    const [playerPDA] = await findPlayerPDA(walletPubkey);
+    const playerInfo = await conn.getAccountInfo(playerPDA);
+    if (!playerInfo) {
+        console.log('[KOL] Registering player on-chain...');
+        const regTx = await buildRegisterPlayerTx(walletPubkey);
+        await signAndSendTransaction(regTx);
+        console.log('[KOL] Player registered.');
     }
 
     // Generate client seed
     const clientSeed = crypto.getRandomValues(new Uint8Array(16));
 
+    // Build and send the drill transaction (includes token transfer)
     const tx = await buildDrillTx(walletPubkey, rank, stakeAmount, clientSeed);
     const sig = await signAndSendTransaction(tx);
 
-    // Parse transaction logs for DrillResult event
-    const conn = getSolConnection();
-    const txInfo = await conn.getTransaction(sig, { commitment: 'confirmed' });
+    console.log('[KOL] Drill TX confirmed:', sig);
 
     return {
         signature: sig,
-        // The backend indexer will have the full result; return basic info here
         outcome: 'pending',
-        tx: txInfo,
     };
 }
 

@@ -87,20 +87,6 @@ async def get_pipeline():
     return await game_engine.get_ladder_state()
 
 
-@app.post("/api/challenge")
-async def challenge(req: ChallengeRequest):
-    try:
-        result = await game_engine.create_challenge(
-            challenger=req.challenger,
-            target_rank=req.target_rank,
-            stake_amount=req.stake_amount,
-            client_seed=req.client_seed,
-        )
-        return result
-    except ValueError as e:
-        raise HTTPException(400, str(e))
-
-
 @app.get("/api/challenge/{challenge_id}")
 async def get_challenge(challenge_id: str):
     challenge = await db.get_challenge(challenge_id)
