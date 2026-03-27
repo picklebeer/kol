@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL - King of the Oil Lines</title>
+    <meta name="description" content="KOL — the Solana token that fuels the pipeline. Drill, claim, and dominate.">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* ─── Mascot ─── */
+        .nav-mascot {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+            filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.3));
+        }
+
+        .mascot-img {
+            object-fit: contain;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-mascot {
+            margin-bottom: 1.5rem;
+        }
+
+        .mascot-hero {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 0 40px rgba(0, 240, 255, 0.25)) drop-shadow(0 0 80px rgba(255, 0, 170, 0.15));
+            animation: mascotFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+
+        .mascot-cta {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.2));
+            animation: mascotFloat 4s ease-in-out 1s infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── Landing-specific styles ─── */
+        .landing-hero {
+            text-align: center;
+            padding: 8rem 2rem 6rem;
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .landing-hero .glitch { font-size: 5rem; }
+
+        .landing-tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+        }
+
+        .landing-desc {
+            max-width: 650px;
+            margin: 2rem auto 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .landing-cta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .landing-cta .btn { padding: 0.85rem 2.5rem; font-size: 0.95rem; }
+
+        /* ─── Features ─── */
+        .features {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ─── How It Works Carousel ─── */
+        .how-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slide-visual {
+            width: 100%;
+            max-width: 520px;
+            aspect-ratio: 16 / 9;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .slide-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(0,240,255,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .slide-icon { position: relative; z-index: 2; }
+        .slide-icon svg {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.3));
+        }
+
+        .visual-badge {
+            position: absolute;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.7rem;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: var(--neon-cyan);
+            white-space: nowrap;
+        }
+
+        .float-1 { animation: floatBadge 3s ease-in-out infinite; }
+        .float-2 { animation: floatBadge 3.5s ease-in-out 0.3s infinite; }
+        .float-3 { animation: floatBadge 2.8s ease-in-out 0.6s infinite; }
+        .float-4 { animation: floatBadge 3.2s ease-in-out 0.9s infinite; }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 240, 255, 0.12);
+            animation: pulseRing 2.5s ease-out infinite;
+        }
+
+        .pulse-ring:nth-child(2) { animation-delay: 0.8s; }
+        .pulse-ring:nth-child(3) { animation-delay: 1.6s; }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .slide-step-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--neon-cyan);
+            opacity: 0.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        .slide-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 480px;
+        }
+
+        .slide-detail {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .slide-detail-item {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .detail-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            flex-shrink: 0;
+        }
+
+        /* Navigation */
+        .carousel-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 1.1rem;
+        }
+
+        .carousel-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+
+        .carousel-btn:active { transform: scale(0.9); }
+
+        .carousel-dots { display: flex; gap: 0.6rem; }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        .carousel-dot:hover:not(.active) { background: var(--text-muted); }
+
+        .carousel-progress {
+            width: 100%;
+            max-width: 520px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+            margin: 1.5rem auto 0;
+            overflow: hidden;
+        }
+
+        .carousel-progress-bar {
+            height: 100%;
+            background: var(--gradient-cyber);
+            border-radius: 1px;
+            transition: width 0.4s ease;
+        }
+
+        /* Mini pipeline graphic */
+        .mini-pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: absolute;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .mini-line {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: slideInLine 0.4s forwards;
+        }
+
+        .mini-line:nth-child(1) { animation-delay: 0.2s; color: var(--neon-yellow); }
+        .mini-line:nth-child(2) { animation-delay: 0.4s; }
+        .mini-line:nth-child(3) { animation-delay: 0.6s; }
+        .mini-line:nth-child(4) { animation-delay: 0.8s; }
+        .mini-line:nth-child(5) { animation-delay: 1.0s; }
+
+        @keyframes slideInLine {
+            from { opacity: 0; transform: translateX(12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .mini-line-bar {
+            width: 50px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            overflow: hidden;
+        }
+
+        .mini-line-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--neon-cyan);
+            animation: fillBar 1.5s ease-out forwards;
+            width: 0%;
+        }
+
+        .mini-line:nth-child(1) .mini-line-fill { animation-delay: 0.4s; background: var(--neon-yellow); }
+        .mini-line:nth-child(2) .mini-line-fill { animation-delay: 0.6s; }
+        .mini-line:nth-child(3) .mini-line-fill { animation-delay: 0.8s; }
+        .mini-line:nth-child(4) .mini-line-fill { animation-delay: 1.0s; }
+        .mini-line:nth-child(5) .mini-line-fill { animation-delay: 1.2s; }
+
+        @keyframes fillBar { to { width: var(--fill); } }
+
+        /* Drill bit animation */
+        .drill-anim {
+            position: absolute;
+            width: 4px;
+            height: 0;
+            background: var(--gradient-cyber);
+            border-radius: 2px;
+            left: 50%;
+            top: 28%;
+            transform: translateX(-50%);
+            animation: drillDown 2.2s ease-in-out infinite;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+        }
+
+        @keyframes drillDown {
+            0% { height: 0; top: 28%; opacity: 1; }
+            45% { height: 70px; top: 50%; opacity: 1; }
+            65% { height: 70px; top: 50%; opacity: 0.5; }
+            100% { height: 0; top: 28%; opacity: 0; }
+        }
+
+        .oil-spark {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: sparkBurst 2.2s ease-out infinite;
+        }
+
+        @keyframes sparkBurst {
+            0%, 55% { opacity: 0; transform: translate(0,0) scale(0); }
+            65% { opacity: 1; transform: translate(var(--sx), var(--sy)) scale(1); }
+            100% { opacity: 0; transform: translate(calc(var(--sx) * 2.5), calc(var(--sy) * 2.5)) scale(0); }
+        }
+
+        /* Win chance bar */
+        .chance-bar {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+            border-radius: 3px;
+            animation: chanceGrow 2.5s ease-in-out infinite;
+        }
+
+        @keyframes chanceGrow { 0%, 100% { width: 45%; } 50% { width: 65%; } }
+
+        .chance-label {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        /* Coin floats (slide 5) */
+        .coin-float {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.08);
+        }
+
+        .coin-1 { animation: coinDrift 3s ease-in-out infinite; top: 20%; left: 22%; }
+        .coin-2 { animation: coinDrift 3.5s ease-in-out 0.5s infinite; top: 32%; right: 18%; }
+        .coin-3 { animation: coinDrift 2.8s ease-in-out 1s infinite; bottom: 24%; left: 32%; }
+        .coin-4 { animation: coinDrift 3.2s ease-in-out 1.5s infinite; bottom: 28%; right: 28%; }
+
+        @keyframes coinDrift {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-10px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Shield for defend slide */
+        .shield-pulse {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border: 2px solid rgba(255, 230, 0, 0.25);
+            border-radius: 50%;
+            animation: shieldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.3); opacity: 0.9; border-color: rgba(255, 230, 0, 0.6); }
+        }
+
+        /* ═══════════ DEEP DIVE SECTIONS ═══════════ */
+        .deep-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            border-top: 1px solid rgba(42, 42, 62, 0.4);
+        }
+
+        .deep-row {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .deep-row.reverse { flex-direction: row-reverse; }
+
+        .deep-visual {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .deep-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .deep-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--neon-cyan);
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .deep-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .deep-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .deep-highlights {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .deep-highlight {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .dh-value {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+        }
+
+        .dh-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ── Scroll reveal animations ── */
+        .reveal-left,
+        .reveal-right {
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-left { transform: translateX(-60px); }
+        .reveal-right { transform: translateX(60px); }
+
+        .reveal-row.revealed .reveal-left,
+        .reveal-row.revealed .reveal-right {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* stagger the second child */
+        .reveal-row.revealed > :nth-child(2) {
+            transition-delay: 0.15s;
+        }
+
+        /* ── Pipeline Table Visual ── */
+        .pipeline-table-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ptv-row {
+            display: grid;
+            grid-template-columns: 50px 1fr 100px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.78rem;
+            border-bottom: 1px solid rgba(42, 42, 62, 0.4);
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .reveal-row.revealed .ptv-row {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-row.revealed .ptv-row[data-delay="0"] { transition-delay: 0.2s; }
+        .reveal-row.revealed .ptv-row[data-delay="1"] { transition-delay: 0.28s; }
+        .reveal-row.revealed .ptv-row[data-delay="2"] { transition-delay: 0.36s; }
+        .reveal-row.revealed .ptv-row[data-delay="3"] { transition-delay: 0.44s; }
+        .reveal-row.revealed .ptv-row[data-delay="4"] { transition-delay: 0.52s; }
+        .reveal-row.revealed .ptv-row[data-delay="5"] { transition-delay: 0.60s; }
+        .reveal-row.revealed .ptv-row[data-delay="6"] { transition-delay: 0.68s; }
+        .reveal-row.revealed .ptv-row[data-delay="7"] { transition-delay: 0.76s; }
+        .reveal-row.revealed .ptv-row[data-delay="8"] { transition-delay: 0.84s; }
+        .reveal-row.revealed .ptv-row[data-delay="9"] { transition-delay: 0.92s; }
+
+        .ptv-row:last-child { border-bottom: none; }
+
+        .ptv-header {
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.65rem;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transform: none;
+        }
+
+        .ptv-row span:last-child {
+            text-align: right;
+            color: var(--neon-green);
+            font-weight: 700;
+        }
+
+        .ptv-header span:last-child { color: var(--text-muted); }
+
+        .ptv-gold span:first-child { color: var(--neon-yellow); font-weight: 900; }
+        .ptv-silver span:first-child { color: #aaa; font-weight: 900; }
+        .ptv-bronze span:first-child { color: #cd7f32; font-weight: 900; }
+
+        /* ── Game Loop Flowchart ── */
+        .gameloop-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 2rem 1rem;
+        }
+
+        .flow-node {
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+        }
+
+        .flow-start { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+        .flow-drill {
+            border-color: var(--neon-magenta);
+            color: var(--neon-magenta);
+            font-size: 1rem;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 170, 0.15);
+        }
+        .flow-win { border-color: var(--neon-green); color: var(--neon-green); }
+        .flow-lose { border-color: var(--neon-red); color: var(--neon-red); }
+
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1;
+        }
+
+        .flow-arrow-sm {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1;
+            margin-bottom: 0.2rem;
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .flow-path {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .flow-result {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.5;
+            margin-top: 0.3rem;
+        }
+
+        .flow-win-path .flow-result { color: rgba(0, 255, 136, 0.6); }
+        .flow-lose-path .flow-result { color: rgba(255, 51, 85, 0.6); }
+
+        /* ── Win Probability Bars ── */
+        .odds-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .odds-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .odds-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .odds-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            width: 80px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .odds-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(42, 42, 62, 0.6);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .odds-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+            border-radius: 4px;
+            transition: width 1.2s ease;
+        }
+
+        .reveal-row.revealed .odds-fill {
+            width: var(--target-width);
+        }
+
+        .odds-pct {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            width: 36px;
+            flex-shrink: 0;
+        }
+
+        .odds-formula {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            text-align: center;
+            letter-spacing: 0.03em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── Outcome Cards ── */
+        .outcomes-cards {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .outcome-card {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .outcome-win-card { border-color: rgba(0, 255, 136, 0.3); }
+        .outcome-lose-card { border-color: rgba(255, 51, 85, 0.3); }
+
+        .oc-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .oc-title {
+            font-size: 0.9rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .oc-list {
+            list-style: none;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 2;
+            text-align: left;
+            padding-left: 0.5rem;
+        }
+
+        .oc-list li::before {
+            content: '>';
+            color: var(--text-muted);
+            margin-right: 0.5rem;
+            font-weight: 700;
+        }
+
+        .oc-list strong { color: var(--text-primary); }
+
+        /* Deep example block */
+        .deep-example {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .de-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .de-row {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .de-label {
+            color: var(--text-muted);
+            font-weight: 700;
+            width: 45px;
+        }
+
+        /* ── Fairness Visual ── */
+        .fairness-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .fv-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .fv-sources {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .fv-source {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.8rem;
+            background: rgba(0, 240, 255, 0.04);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 6px;
+        }
+
+        .fv-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+        }
+
+        .fv-bytes {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+
+        .fv-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .fv-hash-box {
+            padding: 0.7rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(255, 0, 170, 0.08));
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 8px;
+        }
+
+        .fv-hash-label {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            letter-spacing: 0.1em;
+        }
+
+        .fv-roll-box {
+            padding: 0.6rem 1.5rem;
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--neon-green);
+        }
+
+        /* ── Defender Visual ── */
+        .defender-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .dv-shield {
+            animation: shieldFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes shieldFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .dv-income-demo {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .dv-demo-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .dv-demo-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(42, 42, 62, 0.6);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.6rem;
+        }
+
+        .dv-demo-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-yellow), var(--neon-green));
+            border-radius: 4px;
+            transition: width 2s ease;
+        }
+
+        .reveal-row.revealed .dv-demo-fill { width: 100%; }
+
+        .dv-demo-value {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--neon-yellow);
+        }
+
+        /* ── Displacement Visual ── */
+        .displacement-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .disp-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+        }
+
+        .disp-rank {
+            font-weight: 900;
+            color: var(--text-muted);
+            width: 30px;
+        }
+
+        .disp-name {
+            flex: 1;
+            color: var(--text-secondary);
+        }
+
+        .disp-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .disp-active {
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.04);
+        }
+        .disp-active .disp-rank { color: var(--neon-green); }
+        .disp-attacker { color: var(--neon-green); }
+
+        .disp-displaced {
+            border: 1px solid rgba(255, 230, 0, 0.3);
+            background: rgba(255, 230, 0, 0.04);
+        }
+        .disp-displaced .disp-rank { color: var(--neon-yellow); }
+        .disp-defender { color: var(--neon-yellow); }
+
+        .disp-at-risk {
+            border: 1px dashed rgba(42, 42, 62, 0.6);
+        }
+
+        .disp-eliminated {
+            border: 1px solid rgba(255, 51, 85, 0.3);
+            background: rgba(255, 51, 85, 0.04);
+        }
+        .disp-eliminated .disp-rank { color: var(--neon-red); }
+        .disp-removed { color: var(--neon-red); }
+
+        .disp-cascade-arrow {
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            padding: 0.2rem 0;
+        }
+
+        .disp-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.4rem 0;
+        }
+
+        /* ── Token Flow Visual ── */
+        .tokenflow-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tf-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            border: 1px solid rgba(42, 42, 62, 0.4);
+        }
+
+        .tf-flow-label {
+            flex: 1;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .tf-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .tf-dest {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+        }
+
+        .tf-win { border-color: rgba(0, 255, 136, 0.2); }
+        .tf-win .tf-dest { color: var(--neon-green); }
+        .tf-lose { border-color: rgba(255, 230, 0, 0.2); }
+        .tf-lose .tf-dest { color: var(--neon-yellow); }
+        .tf-vault { border-color: rgba(0, 240, 255, 0.2); }
+        .tf-vault .tf-dest { color: var(--neon-cyan); }
+        .tf-displace { border-color: rgba(255, 0, 170, 0.2); }
+        .tf-displace .tf-dest { color: var(--neon-magenta); }
+
+        .tf-note {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-top: 0.5rem;
+            padding: 0.6rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        /* ── Deep sections responsive ── */
+        @media (max-width: 768px) {
+            .deep-section { padding: 3rem 1.5rem; }
+
+            .deep-row,
+            .deep-row.reverse {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .deep-title { font-size: 1.3rem; }
+            .dh-value { font-size: 1.1rem; }
+
+            .outcomes-cards { flex-direction: column; }
+
+            .fv-sources { grid-template-columns: 1fr; }
+
+            .flow-branch { gap: 1rem; }
+            .flow-node { padding: 0.5rem 1rem; font-size: 0.72rem; }
+        }
+
+        /* Touch swipe hint */
+        .swipe-hint {
+            display: none;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .slide-visual { aspect-ratio: 4 / 3; }
+            .slide-icon svg { width: 70px; height: 70px; }
+            .slide-title { font-size: 1.1rem; }
+            .mini-pipeline { display: none; }
+            .carousel-btn { width: 36px; height: 36px; font-size: 1rem; }
+            .swipe-hint { display: block; }
+        }
+
+        /* ─── Token info ─── */
+        .token-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* ─── CTA Banner ─── */
+        .cta-banner {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 240, 255, 0.03) 50%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-sub {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .landing-hero .glitch { font-size: 3rem; }
+            .landing-hero { padding: 6rem 1rem 4rem; min-height: auto; }
+            .landing-cta { flex-direction: column; align-items: center; }
+            .mascot-hero { width: 130px; height: 130px; }
+            .mascot-cta { width: 75px; height: 75px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar">
+    <a href="/" class="nav-logo" style="text-decoration: none;"><img src="/img/oilking.png" alt="" class="nav-mascot">KOL</a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#deep-pipeline">Deep Dive</a></li>
+        <li><a href="#token">Token</a></li>
+        <li class="mobile-only"><a href="/app" class="btn btn-glow" style="margin-top: 1rem;">Launch App</a></li>
+    </ul>
+    <a href="/app" class="btn btn-glow nav-desktop-cta">Launch App</a>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="landing-hero">
+    <div class="hero-mascot">
+        <img src="/img/oilking.png" alt="Oil King mascot" class="mascot-img mascot-hero">
+    </div>
+    <h1 class="glitch" data-text="KOL">KOL</h1>
+    <p class="landing-tagline">King of the Oil Lines</p>
+    <p class="landing-desc">
+        The Solana token that fuels the pipeline. Stake KOL to drill into ranked
+        oil lines. Claim the richest routes. Defend your territory. Extract rewards.
+    </p>
+    <div class="landing-cta">
+        <a href="/app" class="btn btn-glow">Start Drilling</a>
+        <a href="#how" class="btn btn-primary">Learn More</a>
+    </div>
+</section>
+
+<!-- ═══════════ FEATURES ═══════════ -->
+<section class="features" id="features">
+    <div class="feature-card">
+        <div class="feature-icon">&#9881;</div>
+        <div class="feature-title">Drill & Claim</div>
+        <div class="feature-desc">
+            Stake KOL tokens to drill into any of the 10 oil line routes.
+            Higher stakes improve your odds. Go big or go dry.
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">&#9878;</div>
+        <div class="feature-title">Provably Fair</div>
+        <div class="feature-desc">
+            Every drill op uses SHA-256 commit-reveal randomness.
+            Server seed hashed before your move, revealed after.
+            Verify every outcome yourself.
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">&#9730;</div>
+        <div class="feature-title">Hold & Extract</div>
+        <div class="feature-desc">
+            Control an oil line and extract a cut from every failed drill
+            against your route. The richer the line, the more you earn.
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">&#9883;</div>
+        <div class="feature-title">Solana Speed</div>
+        <div class="feature-desc">
+            Built on Solana for sub-second finality and near-zero fees.
+            Connect Phantom or Solflare and start drilling instantly.
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">&#9733;</div>
+        <div class="feature-title">Leaderboard</div>
+        <div class="feature-desc">
+            Top drillers ranked by total barrels extracted. Dominate the leaderboard
+            and prove you run the pipeline.
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">&#8734;</div>
+        <div class="feature-title">Token Utility</div>
+        <div class="feature-desc">
+            KOL isn't just a token &mdash; it's your drill bit, your pipeline deed,
+            and your payout. Real utility, real gameplay.
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS — CAROUSEL ═══════════ -->
+<section class="how-section" id="how">
+    <div class="section-title" style="justify-content: center;">How It Works</div>
+
+    <div class="carousel" id="howCarousel">
+        <div class="carousel-track" id="carouselTrack">
+
+            <!-- ── SLIDE 1: Connect Wallet ── -->
+            <div class="carousel-slide">
+                <div class="slide-visual">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="18" y="28" width="64" height="44" rx="8" stroke="url(#cg1)" stroke-width="2.5" fill="rgba(0,240,255,0.04)"/>
+                            <circle cx="50" cy="50" r="10" stroke="#00f0ff" stroke-width="2" fill="rgba(0,240,255,0.08)"/>
+                            <path d="M47 50l3 3 6-6" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="38" y="22" width="24" height="6" rx="3" fill="rgba(0,240,255,0.15)"/>
+                            <defs><linearGradient id="cg1" x1="18" y1="28" x2="82" y2="72"><stop stop-color="#00f0ff"/><stop offset="1" stop-color="#ff00aa"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span class="visual-badge float-1" style="top:16%; left:8%;">Phantom</span>
+                    <span class="visual-badge float-2" style="top:16%; right:8%;">Solflare</span>
+                    <span class="visual-badge float-3" style="bottom:14%; left:18%; border-color: rgba(0,255,136,0.3); color: var(--neon-green); background: rgba(0,255,136,0.08);">Connected</span>
+                </div>
+                <div class="slide-step-label">Step 1</div>
+                <div class="slide-title">Connect Your Wallet</div>
+                <div class="slide-desc">
+                    Link your Solana wallet in one click. Phantom and Solflare supported.
+                    Your keys, your oil.
+                </div>
+                <div class="slide-detail">
+                    <div class="slide-detail-item"><span class="detail-dot"></span> One-click connect</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Non-custodial</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Instant access</div>
+                </div>
+            </div>
+
+            <!-- ── SLIDE 2: Choose an Oil Line ── -->
+            <div class="carousel-slide">
+                <div class="slide-visual">
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="15" y="20" width="70" height="60" rx="6" stroke="url(#cg2)" stroke-width="2" fill="rgba(0,240,255,0.03)"/>
+                            <line x1="15" y1="34" x2="85" y2="34" stroke="var(--border)" stroke-width="1"/>
+                            <text x="22" y="30" fill="#ffe600" font-size="7" font-weight="bold" font-family="monospace">#1</text>
+                            <text x="22" y="46" fill="#aaa" font-size="7" font-weight="bold" font-family="monospace">#2</text>
+                            <text x="22" y="58" fill="#cd7f32" font-size="7" font-weight="bold" font-family="monospace">#3</text>
+                            <text x="22" y="70" fill="#555577" font-size="7" font-family="monospace">#4</text>
+                            <rect x="38" y="24" width="35" height="6" rx="3" fill="rgba(255,230,0,0.15)"/>
+                            <rect x="38" y="39" width="28" height="6" rx="3" fill="rgba(170,170,170,0.12)"/>
+                            <rect x="38" y="51" width="22" height="6" rx="3" fill="rgba(205,127,50,0.12)"/>
+                            <rect x="38" y="63" width="18" height="6" rx="3" fill="rgba(85,85,119,0.12)"/>
+                            <defs><linearGradient id="cg2" x1="15" y1="20" x2="85" y2="80"><stop stop-color="#00f0ff"/><stop offset="1" stop-color="#ff00aa"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <div class="mini-pipeline">
+                        <div class="mini-line"><span>#1</span><div class="mini-line-bar"><div class="mini-line-fill" style="--fill: 95%"></div></div><span>100K</span></div>
+                        <div class="mini-line"><span>#2</span><div class="mini-line-bar"><div class="mini-line-fill" style="--fill: 80%"></div></div><span>75K</span></div>
+                        <div class="mini-line"><span>#3</span><div class="mini-line-bar"><div class="mini-line-fill" style="--fill: 65%"></div></div><span>50K</span></div>
+                        <div class="mini-line"><span>#4</span><div class="mini-line-bar"><div class="mini-line-fill" style="--fill: 45%"></div></div><span>35K</span></div>
+                        <div class="mini-line"><span>#5</span><div class="mini-line-bar"><div class="mini-line-fill" style="--fill: 30%"></div></div><span>25K</span></div>
+                    </div>
+                    <span class="visual-badge float-1" style="bottom:12%; left:10%; border-color: rgba(255,230,0,0.3); color: var(--neon-yellow); background: rgba(255,230,0,0.08);">10 Lines</span>
+                </div>
+                <div class="slide-step-label">Step 2</div>
+                <div class="slide-title">Choose Your Oil Line</div>
+                <div class="slide-desc">
+                    10 ranked oil lines form the pipeline. Higher ranks require bigger stakes
+                    but yield richer rewards. Pick your target.
+                </div>
+                <div class="slide-detail">
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Rank #1 = 100,000 KOL min</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Rank #10 = 2,500 KOL min</div>
+                </div>
+            </div>
+
+            <!-- ── SLIDE 3: Drill ── -->
+            <div class="carousel-slide">
+                <div class="slide-visual">
+                    <div class="drill-anim"></div>
+                    <div class="slide-icon" style="margin-top: -20px;">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 15 L54 45 L50 55 L46 45 Z" fill="url(#cg3)" opacity="0.9"/>
+                            <rect x="44" y="8" width="12" height="10" rx="2" fill="rgba(0,240,255,0.2)" stroke="#00f0ff" stroke-width="1.5"/>
+                            <circle cx="50" cy="70" r="12" stroke="#00f0ff" stroke-width="1.5" fill="rgba(0,240,255,0.05)" stroke-dasharray="4 3"/>
+                            <defs><linearGradient id="cg3" x1="46" y1="15" x2="54" y2="55"><stop stop-color="#00f0ff"/><stop offset="1" stop-color="#ff00aa"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <!-- Oil sparks -->
+                    <div class="oil-spark" style="left:48%; top:58%; background: var(--neon-green); --sx: -20px; --sy: -15px;"></div>
+                    <div class="oil-spark" style="left:52%; top:58%; background: var(--neon-cyan); --sx: 18px; --sy: -12px;"></div>
+                    <div class="oil-spark" style="left:50%; top:60%; background: var(--neon-yellow); --sx: -8px; --sy: 20px;"></div>
+                    <div class="oil-spark" style="left:49%; top:59%; background: var(--neon-magenta); --sx: 25px; --sy: 8px;"></div>
+                    <div class="oil-spark" style="left:51%; top:57%; background: var(--neon-green); --sx: -15px; --sy: 18px;"></div>
+                    <div class="chance-label">Win chance: 45% &mdash; 65%</div>
+                    <div class="chance-bar"><div class="chance-fill"></div></div>
+                </div>
+                <div class="slide-step-label">Step 3</div>
+                <div class="slide-title">Drill &amp; Strike Oil</div>
+                <div class="slide-desc">
+                    Provably fair on-chain roll determines your fate. Stake more to boost your odds
+                    from 45% up to 65%. Every outcome is verifiable.
+                </div>
+                <div class="slide-detail">
+                    <div class="slide-detail-item"><span class="detail-dot"></span> SHA-256 commit-reveal</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> On-chain randomness</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> 1.8x payout on win</div>
+                </div>
+            </div>
+
+            <!-- ── SLIDE 4: Defend & Earn ── -->
+            <div class="carousel-slide">
+                <div class="slide-visual">
+                    <div class="shield-pulse"></div>
+                    <div class="shield-pulse" style="animation-delay: 1s;"></div>
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 12 L78 28 L78 55 C78 72 65 84 50 90 C35 84 22 72 22 55 L22 28 Z" stroke="url(#cg4)" stroke-width="2.5" fill="rgba(255,230,0,0.04)"/>
+                            <path d="M50 30 L62 38 L62 52 C62 60 56 66 50 68 C44 66 38 60 38 52 L38 38 Z" fill="rgba(255,230,0,0.1)" stroke="#ffe600" stroke-width="1.5"/>
+                            <text x="44" y="57" fill="#ffe600" font-size="12" font-weight="bold" font-family="monospace">10%</text>
+                            <defs><linearGradient id="cg4" x1="22" y1="12" x2="78" y2="90"><stop stop-color="#ffe600"/><stop offset="1" stop-color="#ff00aa"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span class="visual-badge float-2" style="top:14%; right:12%; border-color: rgba(255,230,0,0.3); color: var(--neon-yellow); background: rgba(255,230,0,0.08);">Defender Cut</span>
+                    <span class="visual-badge float-3" style="bottom:15%; left:10%; border-color: rgba(0,255,136,0.3); color: var(--neon-green); background: rgba(0,255,136,0.08);">Passive Income</span>
+                </div>
+                <div class="slide-step-label">Step 4</div>
+                <div class="slide-title">Defend &amp; Extract</div>
+                <div class="slide-desc">
+                    Hold an oil line and earn 10% of every failed drill against your position.
+                    The longer you hold, the more you extract. Passive income from the pipeline.
+                </div>
+                <div class="slide-detail">
+                    <div class="slide-detail-item"><span class="detail-dot"></span> 10% defender cut</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Auto-credited</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Withdraw anytime</div>
+                </div>
+            </div>
+
+            <!-- ── SLIDE 5: Dominate the Leaderboard ── -->
+            <div class="carousel-slide">
+                <div class="slide-visual">
+                    <div class="slide-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="15" y="55" width="20" height="30" rx="3" fill="rgba(170,170,170,0.15)" stroke="#aaa" stroke-width="1.5"/>
+                            <rect x="40" y="35" width="20" height="50" rx="3" fill="rgba(255,230,0,0.12)" stroke="#ffe600" stroke-width="2"/>
+                            <rect x="65" y="60" width="20" height="25" rx="3" fill="rgba(205,127,50,0.12)" stroke="#cd7f32" stroke-width="1.5"/>
+                            <text x="46" y="30" fill="#ffe600" font-size="14" font-weight="bold" font-family="monospace">1</text>
+                            <text x="22" y="52" fill="#aaa" font-size="10" font-weight="bold" font-family="monospace">2</text>
+                            <text x="72" y="57" fill="#cd7f32" font-size="10" font-weight="bold" font-family="monospace">3</text>
+                        </svg>
+                    </div>
+                    <div class="coin-float coin-1">K</div>
+                    <div class="coin-float coin-2">K</div>
+                    <div class="coin-float coin-3">K</div>
+                    <div class="coin-float coin-4">K</div>
+                    <span class="visual-badge float-1" style="top:10%; left:12%;">Top Driller</span>
+                    <span class="visual-badge float-4" style="top:12%; right:10%; border-color: rgba(0,255,136,0.3); color: var(--neon-green); background: rgba(0,255,136,0.08);">Most Won</span>
+                </div>
+                <div class="slide-step-label">Step 5</div>
+                <div class="slide-title">Dominate the Leaderboard</div>
+                <div class="slide-desc">
+                    Climb the ranks. Top drillers are tracked by total KOL won, win rate,
+                    and lines held. Build your reputation on the pipeline.
+                </div>
+                <div class="slide-detail">
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Live rankings</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> Win rate tracked</div>
+                    <div class="slide-detail-item"><span class="detail-dot"></span> On-chain verified</div>
+                </div>
+            </div>
+
+        </div><!-- /carousel-track -->
+
+        <!-- Navigation -->
+        <div class="carousel-nav">
+            <button class="carousel-btn" id="carouselPrev" aria-label="Previous slide">&#8592;</button>
+            <div class="carousel-dots" id="carouselDots">
+                <button class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
+                <button class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
+                <button class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
+                <button class="carousel-dot" data-slide="3" aria-label="Slide 4"></button>
+                <button class="carousel-dot" data-slide="4" aria-label="Slide 5"></button>
+            </div>
+            <button class="carousel-btn" id="carouselNext" aria-label="Next slide">&#8594;</button>
+        </div>
+
+        <div class="carousel-progress">
+            <div class="carousel-progress-bar" id="carouselProgress" style="width: 20%;"></div>
+        </div>
+
+        <div class="swipe-hint">Swipe to explore</div>
+    </div>
+</section>
+
+<!-- ═══════════ DEEP DIVE SECTIONS ═══════════ -->
+
+<!-- ── 1. The Pipeline ── -->
+<section class="deep-section" id="deep-pipeline">
+    <div class="deep-row reveal-row">
+        <div class="deep-visual reveal-left">
+            <div class="pipeline-table-visual">
+                <div class="ptv-row ptv-header">
+                    <span>Rank</span><span>Oil Line</span><span>Min Stake</span>
+                </div>
+                <div class="ptv-row ptv-gold" data-delay="0"><span>#1</span><span>Ghawar</span><span>100,000</span></div>
+                <div class="ptv-row ptv-silver" data-delay="1"><span>#2</span><span>Kirkuk-Ceyhan</span><span>75,000</span></div>
+                <div class="ptv-row ptv-bronze" data-delay="2"><span>#3</span><span>Trans-Arabian</span><span>50,000</span></div>
+                <div class="ptv-row" data-delay="3"><span>#4</span><span>Abqaiq</span><span>35,000</span></div>
+                <div class="ptv-row" data-delay="4"><span>#5</span><span>Burgan</span><span>25,000</span></div>
+                <div class="ptv-row" data-delay="5"><span>#6</span><span>Marib</span><span>15,000</span></div>
+                <div class="ptv-row" data-delay="6"><span>#7</span><span>Dura Europos</span><span>10,000</span></div>
+                <div class="ptv-row" data-delay="7"><span>#8</span><span>Bab al-Mandeb</span><span>7,500</span></div>
+                <div class="ptv-row" data-delay="8"><span>#9</span><span>Sidon</span><span>5,000</span></div>
+                <div class="ptv-row" data-delay="9"><span>#10</span><span>Dilmun</span><span>2,500</span></div>
+            </div>
+        </div>
+        <div class="deep-text reveal-right">
+            <div class="deep-label">The Pipeline</div>
+            <h2 class="deep-title">10 Ranked Oil Lines</h2>
+            <p class="deep-desc">
+                The pipeline consists of 10 named positions, each inspired by historic Middle Eastern oil landmarks.
+                Higher ranks demand larger stakes but yield richer rewards. Each position is held by one player
+                at a time &mdash; or sits unclaimed, waiting for a driller bold enough to stake their claim.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-yellow);">100,000</span>
+                    <span class="dh-label">KOL to claim Rank #1</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-cyan);">2,500</span>
+                    <span class="dh-label">KOL entry at Rank #10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 2. Core Game Loop ── -->
+<section class="deep-section" id="deep-gameloop">
+    <div class="deep-row reverse reveal-row">
+        <div class="deep-visual reveal-right">
+            <div class="gameloop-flowchart">
+                <div class="flow-node flow-start">Connect Wallet</div>
+                <div class="flow-arrow">&darr;</div>
+                <div class="flow-node flow-action">Choose Oil Line</div>
+                <div class="flow-arrow">&darr;</div>
+                <div class="flow-node flow-action">Stake KOL</div>
+                <div class="flow-arrow">&darr;</div>
+                <div class="flow-node flow-drill">DRILL</div>
+                <div class="flow-branch">
+                    <div class="flow-path flow-win-path">
+                        <div class="flow-arrow-sm">&swarr;</div>
+                        <div class="flow-node flow-win">Strike Oil</div>
+                        <div class="flow-result">1.8x payout<br>Claim position</div>
+                    </div>
+                    <div class="flow-path flow-lose-path">
+                        <div class="flow-arrow-sm">&searr;</div>
+                        <div class="flow-node flow-lose">Dry Well</div>
+                        <div class="flow-result">Lose stake<br>Defender earns 10%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-left">
+            <div class="deep-label">Game Loop</div>
+            <h2 class="deep-title">Drill or Be Drilled</h2>
+            <p class="deep-desc">
+                Every play follows the same loop: connect your wallet, pick a target oil line,
+                set your stake, and drill. The outcome is resolved instantly using provably-fair
+                on-chain randomness. Win and you claim the position with a 1.8x payout. Lose and
+                your stake feeds the pipeline.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-green);">1.8x</span>
+                    <span class="dh-label">Payout on win</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-red);">100%</span>
+                    <span class="dh-label">Stake lost on miss</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-yellow);">30s</span>
+                    <span class="dh-label">Cooldown between drills</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 3. Win Probability ── -->
+<section class="deep-section" id="deep-odds">
+    <div class="deep-row reveal-row">
+        <div class="deep-visual reveal-left">
+            <div class="odds-visual">
+                <div class="odds-bar-group">
+                    <div class="odds-bar-row">
+                        <span class="odds-label">Min Stake</span>
+                        <div class="odds-bar"><div class="odds-fill" style="--target-width: 45%;"></div></div>
+                        <span class="odds-pct">45%</span>
+                    </div>
+                    <div class="odds-bar-row">
+                        <span class="odds-label">+500 KOL</span>
+                        <div class="odds-bar"><div class="odds-fill" style="--target-width: 50%;"></div></div>
+                        <span class="odds-pct">50%</span>
+                    </div>
+                    <div class="odds-bar-row">
+                        <span class="odds-label">+1,000 KOL</span>
+                        <div class="odds-bar"><div class="odds-fill" style="--target-width: 55%;"></div></div>
+                        <span class="odds-pct">55%</span>
+                    </div>
+                    <div class="odds-bar-row">
+                        <span class="odds-label">+1,500 KOL</span>
+                        <div class="odds-bar"><div class="odds-fill" style="--target-width: 60%;"></div></div>
+                        <span class="odds-pct">60%</span>
+                    </div>
+                    <div class="odds-bar-row">
+                        <span class="odds-label">+2,000 KOL</span>
+                        <div class="odds-bar"><div class="odds-fill" style="--target-width: 65%;"></div></div>
+                        <span class="odds-pct">65%</span>
+                    </div>
+                </div>
+                <div class="odds-formula">
+                    win% = min(45 + &lfloor;(stake &minus; min) / 100&rfloor;, 65)
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-right">
+            <div class="deep-label">Win Probability</div>
+            <h2 class="deep-title">Stake More, Win More</h2>
+            <p class="deep-desc">
+                Your base win chance starts at 45%. For every 100 KOL you stake above the
+                position's minimum, you gain +1% — up to a hard cap of 65%. The formula is
+                transparent, deterministic, and the same for everyone.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-green);">45%</span>
+                    <span class="dh-label">Base win chance</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-cyan);">65%</span>
+                    <span class="dh-label">Maximum cap</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-magenta);">+1%</span>
+                    <span class="dh-label">Per 100 KOL over min</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 4. Outcomes ── -->
+<section class="deep-section" id="deep-outcomes">
+    <div class="deep-row reverse reveal-row">
+        <div class="deep-visual reveal-right">
+            <div class="outcomes-cards">
+                <div class="outcome-card outcome-win-card">
+                    <div class="oc-icon">&#9881;</div>
+                    <div class="oc-title" style="color: var(--neon-green);">Strike Oil</div>
+                    <ul class="oc-list">
+                        <li>Receive <strong>1.8x</strong> your stake</li>
+                        <li>Claim the oil line position</li>
+                        <li>Previous holder displaced</li>
+                        <li>Defense counter resets</li>
+                    </ul>
+                </div>
+                <div class="outcome-card outcome-lose-card">
+                    <div class="oc-icon">&#9888;</div>
+                    <div class="oc-title" style="color: var(--neon-red);">Dry Well</div>
+                    <ul class="oc-list">
+                        <li>Lose your <strong>full stake</strong></li>
+                        <li>Defender earns <strong>10%</strong> cut</li>
+                        <li>Defense counter +1</li>
+                        <li>Position unchanged</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-left">
+            <div class="deep-label">Outcomes</div>
+            <h2 class="deep-title">Strike Oil or Go Dry</h2>
+            <p class="deep-desc">
+                Every drill has two outcomes. Strike oil and you claim the position with a massive payout.
+                Hit a dry well and your entire stake is lost &mdash; with the defender pocketing 10% as a
+                reward for holding the line. High risk, high reward.
+            </p>
+            <div class="deep-example">
+                <div class="de-title">Example &mdash; 10,000 KOL Drill</div>
+                <div class="de-row">
+                    <span class="de-label">Win:</span>
+                    <span class="de-value" style="color: var(--neon-green);">+18,000 KOL + position</span>
+                </div>
+                <div class="de-row">
+                    <span class="de-label">Lose:</span>
+                    <span class="de-value" style="color: var(--neon-red);">&minus;10,000 KOL (defender gets 1,000)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 5. Provably Fair ── -->
+<section class="deep-section" id="deep-fairness">
+    <div class="deep-row reveal-row">
+        <div class="deep-visual reveal-left">
+            <div class="fairness-visual">
+                <div class="fv-title">On-Chain Entropy</div>
+                <div class="fv-sources">
+                    <div class="fv-source">
+                        <div class="fv-badge">SlotHashes</div>
+                        <span class="fv-bytes">32 bytes</span>
+                    </div>
+                    <div class="fv-source">
+                        <div class="fv-badge">Client Seed</div>
+                        <span class="fv-bytes">16 bytes</span>
+                    </div>
+                    <div class="fv-source">
+                        <div class="fv-badge">Wallet Pubkey</div>
+                        <span class="fv-bytes">32 bytes</span>
+                    </div>
+                    <div class="fv-source">
+                        <div class="fv-badge">Timestamp</div>
+                        <span class="fv-bytes">8 bytes</span>
+                    </div>
+                </div>
+                <div class="fv-arrow">&darr;</div>
+                <div class="fv-hash-box">
+                    <span class="fv-hash-label">SHA-256</span>
+                </div>
+                <div class="fv-arrow">&darr;</div>
+                <div class="fv-roll-box">
+                    Roll: 0 &mdash; 9,999
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-right">
+            <div class="deep-label">Provably Fair</div>
+            <h2 class="deep-title">Verify Every Outcome</h2>
+            <p class="deep-desc">
+                Every drill uses a commit-reveal randomness scheme. On-chain, four entropy sources are
+                combined and hashed with SHA-256 to produce a roll between 0 and 9,999. Neither the
+                server nor the player can manipulate the result. The API fallback uses the same logic
+                with a pre-committed server seed hash that's revealed after each play.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-cyan);">SHA-256</span>
+                    <span class="dh-label">Hash function</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-green);">88 bytes</span>
+                    <span class="dh-label">Combined entropy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 6. Defender Economics ── -->
+<section class="deep-section" id="deep-defenders">
+    <div class="deep-row reverse reveal-row">
+        <div class="deep-visual reveal-right">
+            <div class="defender-visual">
+                <div class="dv-shield">
+                    <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="144">
+                        <path d="M50 8 L88 28 L88 65 C88 88 70 104 50 112 C30 104 12 88 12 65 L12 28 Z" stroke="url(#dvg)" stroke-width="2.5" fill="rgba(255,230,0,0.04)"/>
+                        <text x="50" y="62" fill="#ffe600" font-size="18" font-weight="bold" font-family="monospace" text-anchor="middle">10%</text>
+                        <text x="50" y="80" fill="#8888aa" font-size="8" font-family="monospace" text-anchor="middle">per failed drill</text>
+                        <defs><linearGradient id="dvg" x1="12" y1="8" x2="88" y2="112"><stop stop-color="#ffe600"/><stop offset="1" stop-color="#ff00aa"/></linearGradient></defs>
+                    </svg>
+                </div>
+                <div class="dv-income-demo">
+                    <div class="dv-demo-title">Defending Rank #5 &mdash; 10 challengers lose at 25K</div>
+                    <div class="dv-demo-bar">
+                        <div class="dv-demo-fill"></div>
+                    </div>
+                    <div class="dv-demo-value">+25,000 KOL earned</div>
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-left">
+            <div class="deep-label">Defender Economics</div>
+            <h2 class="deep-title">Hold the Line, Extract the Rewards</h2>
+            <p class="deep-desc">
+                Holding an oil line generates passive income. Every time a challenger fails to take your
+                position, you automatically receive 10% of their lost stake. The longer you hold, and
+                the more challengers that try, the more you earn. Withdraw your accumulated winnings
+                at any time.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-yellow);">10%</span>
+                    <span class="dh-label">Of every failed drill</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-green);">Auto</span>
+                    <span class="dh-label">Credited instantly</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-cyan);">Anytime</span>
+                    <span class="dh-label">Withdraw on demand</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 7. Position Displacement ── -->
+<section class="deep-section" id="deep-displacement">
+    <div class="deep-row reveal-row">
+        <div class="deep-visual reveal-left">
+            <div class="displacement-visual">
+                <div class="disp-row disp-active">
+                    <span class="disp-rank">#3</span>
+                    <span class="disp-name">Trans-Arabian</span>
+                    <span class="disp-label disp-attacker">Challenger wins</span>
+                </div>
+                <div class="disp-cascade-arrow">&darr; displaced to #4 at 50% stake</div>
+                <div class="disp-row disp-displaced">
+                    <span class="disp-rank">#4</span>
+                    <span class="disp-name">Abqaiq</span>
+                    <span class="disp-label disp-defender">Previous holder</span>
+                </div>
+                <div class="disp-cascade-arrow">&darr; may cascade on next challenge</div>
+                <div class="disp-row disp-at-risk">
+                    <span class="disp-rank">#5</span>
+                    <span class="disp-name">Burgan</span>
+                    <span class="disp-label">At risk</span>
+                </div>
+                <div class="disp-divider"></div>
+                <div class="disp-row disp-eliminated">
+                    <span class="disp-rank">#10</span>
+                    <span class="disp-name">Dilmun</span>
+                    <span class="disp-label disp-removed">Removed entirely</span>
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-right">
+            <div class="deep-label">Displacement</div>
+            <h2 class="deep-title">The Cascade Effect</h2>
+            <p class="deep-desc">
+                When a position holder is defeated, they don't vanish &mdash; they drop one rank with 50% of
+                their original stake. This can create a cascade: winning Rank 3 pushes the holder to Rank 4,
+                potentially displacing whoever was there. The exception is Rank 10 &mdash; lose there and
+                you're out of the pipeline entirely.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-yellow);">50%</span>
+                    <span class="dh-label">Stake after displacement</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-red);">Rank 10</span>
+                    <span class="dh-label">No safety net</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 8. Token Flow ── -->
+<section class="deep-section" id="deep-tokenflow">
+    <div class="deep-row reverse reveal-row">
+        <div class="deep-visual reveal-right">
+            <div class="tokenflow-visual">
+                <div class="tf-row">
+                    <span class="tf-flow-label">Challenge Stake</span>
+                    <span class="tf-arrow">&rarr;</span>
+                    <span class="tf-dest">Vault (locked)</span>
+                </div>
+                <div class="tf-row tf-win">
+                    <span class="tf-flow-label">Win Payout</span>
+                    <span class="tf-arrow">&rarr;</span>
+                    <span class="tf-dest">1.8x to Challenger</span>
+                </div>
+                <div class="tf-row tf-lose">
+                    <span class="tf-flow-label">Loss &mdash; Defender</span>
+                    <span class="tf-arrow">&rarr;</span>
+                    <span class="tf-dest">10% to Defender</span>
+                </div>
+                <div class="tf-row tf-vault">
+                    <span class="tf-flow-label">Loss &mdash; Remainder</span>
+                    <span class="tf-arrow">&rarr;</span>
+                    <span class="tf-dest">90% stays in Vault</span>
+                </div>
+                <div class="tf-row tf-displace">
+                    <span class="tf-flow-label">Displacement</span>
+                    <span class="tf-arrow">&rarr;</span>
+                    <span class="tf-dest">50% to displaced holder</span>
+                </div>
+                <div class="tf-note">
+                    The vault retains 90% of lost stakes, creating deflationary pressure on circulating KOL.
+                </div>
+            </div>
+        </div>
+        <div class="deep-text reveal-left">
+            <div class="deep-label">Token Economics</div>
+            <h2 class="deep-title">Where the KOL Flows</h2>
+            <p class="deep-desc">
+                Every token staked enters the vault. Wins pay out 1.8x from the vault. Losses split between
+                the defender (10%) and vault retention (90%). Displaced holders receive 50% of their original
+                stake. The vault acts as a deflationary sink &mdash; the more people play, the more KOL
+                the vault absorbs.
+            </p>
+            <div class="deep-highlights">
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-green);">1.8x</span>
+                    <span class="dh-label">Win payout</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-yellow);">10%</span>
+                    <span class="dh-label">Defender cut</span>
+                </div>
+                <div class="deep-highlight">
+                    <span class="dh-value" style="color: var(--neon-magenta);">90%</span>
+                    <span class="dh-label">Vault retention</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ TOKEN ═══════════ -->
+<section class="token-section" id="token">
+    <div class="section-title" style="justify-content: center;">The KOL Token</div>
+    <div class="token-grid">
+        <div class="card">
+            <div class="card-header">Token</div>
+            <div class="card-value" style="font-size: 1.3rem;">KOL</div>
+        </div>
+        <div class="card">
+            <div class="card-header">Chain</div>
+            <div class="card-value" style="font-size: 1.3rem;">Solana</div>
+        </div>
+        <div class="card">
+            <div class="card-header">Supply</div>
+            <div class="card-value" style="font-size: 1.3rem;">1,000,000,000</div>
+        </div>
+        <div class="card">
+            <div class="card-header">Price</div>
+            <div class="card-value" id="landing-price" style="font-size: 1.3rem;">--</div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ CTA BANNER ═══════════ -->
+<section class="cta-banner">
+    <img src="/img/oilking.png" alt="Oil King" class="mascot-img mascot-cta">
+    <div class="cta-title">Ready to Drill?</div>
+    <p class="cta-sub">The pipeline is live. The oil lines are waiting.</p>
+    <div style="margin-top: 2rem;">
+        <a href="/app" class="btn btn-glow" style="padding: 1rem 3rem; font-size: 1rem;">Start Drilling</a>
+    </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+    <p>KOL &mdash; King of the Oil Lines &mdash; Built on Solana</p>
+    <p style="margin-top: 0.5rem;">Provably fair. Fully on-chain verified.</p>
+</footer>
+
+<script src="/js/effects.js"></script>
+<script>
+    // Fetch token price for landing page
+    (async function() {
+        try {
+            const resp = await fetch('/api/token-info');
+            const info = await resp.json();
+            const el = document.getElementById('landing-price');
+            if (info.price) {
+                el.textContent = '$' + info.price.toFixed(6);
+            }
+        } catch {}
+    })();
+
+    // ─── Hamburger Menu ───
+    (function() {
+        const btn = document.getElementById('hamburgerBtn');
+        const nav = document.getElementById('navLinks');
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+            nav.classList.toggle('open');
+        });
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                btn.classList.remove('active');
+                nav.classList.remove('open');
+            });
+        });
+    })();
+
+    // ─── Carousel Controller ───
+    (function() {
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const progress = document.getElementById('carouselProgress');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+        const totalSlides = dots.length;
+        let current = 0;
+        let autoTimer = null;
+
+        function goTo(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            current = index;
+            track.style.transform = `translateX(-${current * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            progress.style.width = `${((current + 1) / totalSlides) * 100}%`;
+            resetAuto();
+        }
+
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+
+        prevBtn.addEventListener('click', prev);
+        nextBtn.addEventListener('click', next);
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => goTo(parseInt(dot.dataset.slide)));
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const rect = document.getElementById('howCarousel').getBoundingClientRect();
+            const inView = rect.top < window.innerHeight && rect.bottom > 0;
+            if (!inView) return;
+            if (e.key === 'ArrowRight') next();
+            if (e.key === 'ArrowLeft') prev();
+        });
+
+        // Touch swipe
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        track.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? next() : prev();
+            }
+        }, { passive: true });
+
+        // Auto-advance every 6 seconds
+        function resetAuto() {
+            if (autoTimer) clearInterval(autoTimer);
+            autoTimer = setInterval(next, 6000);
+        }
+
+        // Pause auto on hover
+        const carousel = document.getElementById('howCarousel');
+        carousel.addEventListener('mouseenter', () => {
+            if (autoTimer) clearInterval(autoTimer);
+        });
+        carousel.addEventListener('mouseleave', resetAuto);
+
+        resetAuto();
+    })();
+
+    // ─── Scroll Reveal Observer ───
+    (function() {
+        const rows = document.querySelectorAll('.reveal-row');
+        if (!rows.length) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        rows.forEach(row => observer.observe(row));
+    })();
+</script>
+</body>
+</html>

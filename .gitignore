@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+venv/
+*.db
+.DS_Store
+node_modules/
+
+# Solana / Anchor contract build artifacts
+contracts/target/
+contracts/.anchor/
+
+# Program keypair (sensitive)
+contracts/target/deploy/*.json
+*.so

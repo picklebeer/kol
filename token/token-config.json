@@ -1,0 +1,13 @@
+{
+    "name": "KOL",
+    "symbol": "KOL",
+    "description": "King of the Oil Lines — Drill. Claim. Dominate.",
+    "decimals": 9,
+    "initial_supply": 1000000000,
+    "image": "",
+    "external_url": "",
+    "attributes": [
+        { "trait_type": "game", "value": "King of the Oil Lines" },
+        { "trait_type": "chain", "value": "Solana" }
+    ]
+}

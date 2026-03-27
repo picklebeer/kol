@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>KOL - The Oil Fields</title>
+        <meta
+            name="description"
+            content="Stake KOL tokens. Drill into oil lines. Claim the pipeline."
+        />
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/css/styles.css" />
+    </head>
+    <body>
+        <canvas id="particle-canvas"></canvas>
+
+        <!-- ═══════════ NAVBAR ═══════════ -->
+        <nav class="navbar">
+            <a href="/" class="nav-logo" style="text-decoration: none"
+                ><img src="/img/oilking.png" alt="" class="nav-mascot" />KOL</a
+            >
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="#pipeline" class="active">Pipeline</a></li>
+                <li><a href="#leaderboard">Leaderboard</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li class="mobile-only">
+                    <button
+                        id="wallet-btn-mobile"
+                        class="btn btn-primary"
+                        style="margin-top: 1rem"
+                        onclick="connectWallet()"
+                    >
+                        Connect Wallet
+                    </button>
+                </li>
+            </ul>
+            <button
+                id="wallet-btn"
+                class="btn btn-primary nav-desktop-cta"
+                onclick="connectWallet()"
+            >
+                Connect Wallet
+            </button>
+            <button
+                class="hamburger"
+                id="hamburgerBtn"
+                aria-label="Toggle menu"
+            >
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <!-- ═══════════ APP HEADER ═══════════ -->
+        <section class="app-header">
+            <img
+                src="/img/oilking.png"
+                alt="Oil King"
+                class="mascot-app-header"
+            />
+            <h1
+                class="glitch"
+                data-text="THE OIL FIELDS"
+                style="font-size: 2rem"
+            >
+                THE OIL FIELDS
+            </h1>
+            <p
+                class="hero-subtitle"
+                style="margin-top: 0.5rem; font-size: 0.8rem"
+            >
+                Drill. Claim. Dominate.
+            </p>
+        </section>
+
+        <!-- ═══════════ PLAYER PANEL ═══════════ -->
+        <div class="player-panel" id="player-panel" style="display: none">
+            <div class="section-title">Your Stats</div>
+            <div class="player-stats">
+                <div class="card">
+                    <div class="card-header">Wins</div>
+                    <div
+                        class="card-value"
+                        id="p-wins"
+                        style="color: var(--neon-green)"
+                    >
+                        0
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Losses</div>
+                    <div
+                        class="card-value"
+                        id="p-losses"
+                        style="color: var(--neon-red)"
+                    >
+                        0
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Total Won</div>
+                    <div class="card-value" id="p-won">0</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Total Staked</div>
+                    <div class="card-value" id="p-staked">0</div>
+                </div>
+            </div>
+            <button
+                id="withdraw-btn"
+                class="btn btn-glow"
+                style="display: none; margin-top: 1rem"
+                onclick="withdrawWinnings()"
+            >
+                Withdraw
+            </button>
+        </div>
+
+        <!-- ═══════════ THE PIPELINE ═══════════ -->
+        <section class="pipeline-section" id="pipeline">
+            <div class="section-title">The Pipeline</div>
+            <div id="pipeline-container">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- ═══════════ LEADERBOARD ═══════════ -->
+        <section class="leaderboard-section" id="leaderboard">
+            <div class="section-title">Leaderboard</div>
+            <div class="card">
+                <div
+                    class="lb-row"
+                    style="
+                        color: var(--text-muted);
+                        font-weight: 700;
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.1em;
+                    "
+                >
+                    <div>#</div>
+                    <div>Player</div>
+                    <div style="text-align: right">Won</div>
+                    <div style="text-align: right">Win %</div>
+                </div>
+                <div id="leaderboard-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ CHALLENGE MODAL ═══════════ -->
+        <div class="modal-overlay" id="challenge-modal">
+            <div class="modal">
+                <button class="modal-close" onclick="closeModal()">
+                    &times;
+                </button>
+
+                <!-- Challenge Form -->
+                <div id="challenge-form">
+                    <div class="modal-title">
+                        Drill Line #<span id="modal-rank"></span> &mdash;
+                        <span id="modal-line-name"></span>
+                    </div>
+                    <div
+                        style="
+                            margin-bottom: 1rem;
+                            font-size: 0.85rem;
+                            color: var(--text-secondary);
+                        "
+                    >
+                        Current operator:
+                        <span id="modal-holder" style="color: var(--neon-cyan)"
+                            >--</span
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Stake Amount (KOL)</label>
+                        <input
+                            type="number"
+                            id="stake-input"
+                            placeholder="Min: --"
+                            min="0"
+                            step="100"
+                        />
+                    </div>
+                    <div
+                        style="
+                            font-size: 0.75rem;
+                            color: var(--text-muted);
+                            margin-bottom: 1.5rem;
+                        "
+                    >
+                        Win chance:
+                        <span id="win-chance" style="color: var(--neon-green)"
+                            >45%</span
+                        >
+                        &nbsp;|&nbsp; Potential payout:
+                        <span
+                            id="potential-payout"
+                            style="color: var(--neon-yellow)"
+                            >--</span
+                        >
+                    </div>
+                    <button
+                        class="btn btn-glow"
+                        style="width: 100%"
+                        onclick="submitChallenge()"
+                    >
+                        DRILL
+                    </button>
+                </div>
+
+                <!-- Result Display -->
+                <div id="challenge-result" style="display: none">
+                    <div class="result-display">
+                        <div class="outcome" id="result-outcome"></div>
+                        <div class="result-details" id="result-details"></div>
+                        <button
+                            class="btn btn-primary"
+                            style="margin-top: 1.5rem"
+                            onclick="closeModal()"
+                        >
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ FOOTER ═══════════ -->
+        <footer class="footer">
+            <p>KOL &mdash; King of the Oil Lines &mdash; Built on Solana</p>
+            <p style="margin-top: 0.5rem">
+                Provably fair. Fully on-chain verified.
+            </p>
+        </footer>
+
+        <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+        <script>
+            window.solanaWeb3 = window.solanaWeb3 || solanaWeb3;
+        </script>
+        <script src="/js/effects.js"></script>
+        <script src="/js/wallet.js"></script>
+        <script src="/js/api.js"></script>
+        <script src="/js/contract.js"></script>
+        <script src="/js/game.js"></script>
+        <script src="/js/app.js"></script>
+        <script>
+            // ─── Hamburger Menu ───
+            (function () {
+                const btn = document.getElementById("hamburgerBtn");
+                const nav = document.getElementById("navLinks");
+                btn.addEventListener("click", () => {
+                    btn.classList.toggle("active");
+                    nav.classList.toggle("open");
+                });
+                nav.querySelectorAll("a").forEach((link) => {
+                    link.addEventListener("click", () => {
+                        btn.classList.remove("active");
+                        nav.classList.remove("open");
+                    });
+                });
+            })();
+        </script>
+    </body>
+</html>

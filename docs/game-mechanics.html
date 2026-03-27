@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOL - Game Mechanics Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --bg3: #161622;
+            --border: #2a2a3e;
+            --text: #e0e0f0;
+            --text2: #8888aa;
+            --muted: #555577;
+            --cyan: #00f0ff;
+            --magenta: #ff00aa;
+            --green: #00ff88;
+            --yellow: #ffe600;
+            --red: #ff3355;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--cyan);
+            margin: 3rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.75rem;
+        }
+
+        p { color: var(--text2); margin-bottom: 1rem; font-size: 0.9rem; }
+        strong { color: var(--text); }
+        code {
+            background: var(--bg3);
+            color: var(--cyan);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text2);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            background: var(--bg3);
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text2);
+        }
+
+        tr:hover td { background: rgba(0, 240, 255, 0.02); }
+        td:first-child { color: var(--text); font-weight: 700; }
+
+        /* Cards */
+        .card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Formula boxes */
+        .formula {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1rem 1.5rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            color: var(--green);
+            white-space: pre-line;
+            overflow-x: auto;
+        }
+
+        /* Flowcharts */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .flow-node {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+        }
+
+        .flow-action {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .flow-decision {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            transform: rotate(0deg);
+            border-radius: 4px;
+        }
+
+        .flow-win {
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        .flow-lose {
+            background: rgba(255, 51, 85, 0.08);
+            border: 1px solid var(--red);
+            color: var(--red);
+        }
+
+        .flow-arrow {
+            width: 2px;
+            height: 28px;
+            background: var(--border);
+            position: relative;
+        }
+
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--border);
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .flow-branch-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .flow-label {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0;
+        }
+
+        .flow-sub {
+            font-size: 0.7rem;
+            color: var(--text2);
+            text-align: center;
+            padding: 0.25rem 0.5rem;
+            max-width: 200px;
+        }
+
+        /* Animated pipeline */
+        .pipeline-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .pipe-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 100px;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            animation: pipeSlideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        @keyframes pipeSlideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .pipe-row:nth-child(1) { animation-delay: 0.1s; border-color: var(--yellow); }
+        .pipe-row:nth-child(2) { animation-delay: 0.2s; border-color: #aaa; }
+        .pipe-row:nth-child(3) { animation-delay: 0.3s; border-color: #cd7f32; }
+        .pipe-row:nth-child(4) { animation-delay: 0.4s; }
+        .pipe-row:nth-child(5) { animation-delay: 0.5s; }
+
+        .pipe-rank { font-weight: 900; color: var(--muted); }
+        .pipe-row:nth-child(1) .pipe-rank { color: var(--yellow); }
+        .pipe-row:nth-child(2) .pipe-rank { color: #aaa; }
+        .pipe-row:nth-child(3) .pipe-rank { color: #cd7f32; }
+
+        .pipe-name {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pipe-stake { color: var(--green); text-align: right; font-weight: 700; }
+
+        /* Win chance bar animation */
+        .chance-visual {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .chance-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .chance-label-left {
+            font-size: 0.7rem;
+            color: var(--muted);
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .chance-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chance-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+            animation: growBar 1.5s ease-out forwards;
+            width: 0%;
+        }
+
+        @keyframes growBar { to { width: var(--w); } }
+
+        .chance-pct {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--green);
+            min-width: 40px;
+        }
+
+        /* Outcome animation */
+        .outcome-demo {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .outcome-card {
+            flex: 1;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .outcome-card.win-card {
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .outcome-card.lose-card {
+            background: rgba(255, 51, 85, 0.04);
+            border: 1px solid rgba(255, 51, 85, 0.2);
+        }
+
+        .outcome-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .outcome-title {
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .win-card .outcome-title { color: var(--green); }
+        .lose-card .outcome-title { color: var(--red); }
+
+        .outcome-detail {
+            font-size: 0.75rem;
+            color: var(--text2);
+            line-height: 2;
+        }
+
+        .outcome-value { color: var(--text); font-weight: 700; }
+
+        /* RNG diagram */
+        .rng-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .rng-sources {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .rng-source {
+            padding: 0.5rem 1rem;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--text2);
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .rng-source:nth-child(1) { animation-delay: 0.1s; }
+        .rng-source:nth-child(2) { animation-delay: 0.2s; }
+        .rng-source:nth-child(3) { animation-delay: 0.3s; }
+        .rng-source:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rng-merge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rng-merge-line {
+            width: 40px;
+            height: 2px;
+            background: var(--border);
+        }
+
+        .rng-hash {
+            padding: 0.6rem 1.5rem;
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid var(--cyan);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .rng-output {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .arch-primary {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid var(--cyan);
+        }
+
+        .arch-secondary {
+            background: rgba(255, 0, 170, 0.06);
+            border: 1px solid var(--magenta);
+        }
+
+        .arch-neutral {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+        }
+
+        .arch-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .arch-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .arch-arrow {
+            font-size: 1.2rem;
+            color: var(--muted);
+        }
+
+        /* Displacement animation */
+        .displace-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .displace-row {
+            display: grid;
+            grid-template-columns: 50px 1fr 80px 30px 80px;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .displace-rank { font-weight: 900; color: var(--muted); }
+        .displace-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            overflow: hidden;
+        }
+
+        .displace-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--cyan);
+            transition: width 1s ease-out;
+        }
+
+        .displace-stake { font-size: 0.7rem; color: var(--text2); text-align: right; }
+        .displace-arrow { text-align: center; color: var(--muted); font-size: 0.7rem; }
+        .displace-new { font-size: 0.7rem; color: var(--yellow); text-align: right; }
+
+        /* Defender income animation */
+        .defender-demo {
+            padding: 1.5rem;
+            background: var(--bg2);
+            border: 1px solid rgba(255, 230, 0, 0.2);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .defender-shield {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border: 2px solid rgba(255, 230, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: shieldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); border-color: rgba(255, 230, 0, 0.3); }
+            50% { transform: scale(1.1); border-color: rgba(255, 230, 0, 0.7); }
+        }
+
+        .defender-label {
+            font-size: 0.8rem;
+            color: var(--yellow);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .defender-income-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            font-size: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .defender-income-row:last-child { border-bottom: none; }
+        .defender-income-label { color: var(--text2); }
+        .defender-income-value { color: var(--green); font-weight: 700; }
+
+        /* Error table highlight */
+        .error-table td:first-child {
+            color: var(--red);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.8rem; }
+            .outcome-demo { flex-direction: column; }
+            .arch-diagram { flex-direction: column; }
+            .flow-branch { flex-direction: column; align-items: center; }
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            display: block;
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover { color: var(--cyan); }
+        .toc a::before { content: '> '; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+<h1>KOL</h1>
+<div class="subtitle">King of the Oil Lines &mdash; Game Mechanics</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#overview">Overview</a>
+    <a href="#pipeline">The Pipeline</a>
+    <a href="#gameloop">Core Game Loop</a>
+    <a href="#winchance">Win Probability</a>
+    <a href="#outcomes">Outcomes</a>
+    <a href="#fairness">Provably Fair System</a>
+    <a href="#defender">Defender Economics</a>
+    <a href="#displacement">Position Displacement</a>
+    <a href="#tokenomics">Token Flow</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#errors">Error Conditions</a>
+    <a href="#constants">Constants Reference</a>
+</div>
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<h2 id="overview">Overview</h2>
+<p>
+    KOL is a Solana-based staking game built around a <strong>10-position ranked pipeline</strong>. Players stake KOL tokens to "drill" into oil line positions, competing for control of the pipeline. The game uses <strong>provably-fair randomness</strong>, <strong>on-chain settlement</strong>, and a <strong>defender-rewards system</strong> to create a persistent competitive economy.
+</p>
+
+<!-- ═══════════ PIPELINE ═══════════ -->
+<h2 id="pipeline">The Pipeline</h2>
+<p>The pipeline consists of 10 ranked oil line positions, each named after a historic Middle Eastern oil landmark. Higher ranks require larger stakes but yield richer rewards.</p>
+
+<div class="pipeline-visual">
+    <div class="pipe-row"><span class="pipe-rank">#1</span><span class="pipe-name">Ghawar</span><span class="pipe-stake">100,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#2</span><span class="pipe-name">Kirkuk-Ceyhan</span><span class="pipe-stake">75,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#3</span><span class="pipe-name">Trans-Arabian</span><span class="pipe-stake">50,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#4</span><span class="pipe-name">Abqaiq</span><span class="pipe-stake">35,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#5</span><span class="pipe-name">Burgan</span><span class="pipe-stake">25,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#6</span><span class="pipe-name">Marib</span><span class="pipe-stake">15,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#7</span><span class="pipe-name">Dura Europos</span><span class="pipe-stake">10,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#8</span><span class="pipe-name">Bab al-Mandeb</span><span class="pipe-stake">7,500 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#9</span><span class="pipe-name">Sidon</span><span class="pipe-stake">5,000 KOL</span></div>
+    <div class="pipe-row"><span class="pipe-rank">#10</span><span class="pipe-name">Dilmun</span><span class="pipe-stake">2,500 KOL</span></div>
+</div>
+
+<!-- ═══════════ GAME LOOP ═══════════ -->
+<h2 id="gameloop">Core Game Loop</h2>
+
+<div class="flowchart">
+    <div class="flow-node flow-action">Connect Wallet</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-action">Choose Oil Line (Rank 1-10)</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-action">Set Stake Amount (&ge; Minimum)</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-decision">Drill &mdash; Provably Fair Roll</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-branch">
+        <div class="flow-branch-col">
+            <div class="flow-label">Roll &lt; Threshold</div>
+            <div class="flow-node flow-win">Strike Oil (Win)</div>
+            <div class="flow-sub">Take position + 1.8x payout</div>
+        </div>
+        <div class="flow-branch-col">
+            <div class="flow-label">Roll &ge; Threshold</div>
+            <div class="flow-node flow-lose">Dry Well (Loss)</div>
+            <div class="flow-sub">Lose stake, defender gets 10%</div>
+        </div>
+    </div>
+</div>
+
+<p><strong>Step 1:</strong> Connect a Solana wallet (Phantom or Solflare). A player account is auto-created on first interaction.</p>
+<p><strong>Step 2:</strong> Select any of the 10 oil line positions. Each shows the current holder, stake, minimum requirement, and defense count.</p>
+<p><strong>Step 3:</strong> Enter a stake &ge; the position's minimum. Staking more increases your win chance.</p>
+<p><strong>Step 4:</strong> Submit the drill. Outcome is resolved via provably-fair randomness. A <strong>30-second cooldown</strong> applies between drills.</p>
+
+<!-- ═══════════ WIN PROBABILITY ═══════════ -->
+<h2 id="winchance">Win Probability</h2>
+
+<div class="formula">Base chance:   45%
+Bonus:         +1% per 100 KOL above the minimum stake
+Maximum:       65%
+
+win_chance = min(45 + floor((stake - min_stake) / 100), 65)</div>
+
+<h3>Example: Drilling Rank 10 (Dilmun, min 2,500 KOL)</h3>
+
+<div class="chance-visual">
+    <div class="chance-bar-container">
+        <div class="chance-label-left">2,500 KOL</div>
+        <div class="chance-bar"><div class="chance-fill" style="--w: 45%;"></div></div>
+        <div class="chance-pct">45%</div>
+    </div>
+    <div class="chance-bar-container">
+        <div class="chance-label-left">3,000 KOL</div>
+        <div class="chance-bar"><div class="chance-fill" style="--w: 50%;"></div></div>
+        <div class="chance-pct">50%</div>
+    </div>
+    <div class="chance-bar-container">
+        <div class="chance-label-left">3,500 KOL</div>
+        <div class="chance-bar"><div class="chance-fill" style="--w: 55%;"></div></div>
+        <div class="chance-pct">55%</div>
+    </div>
+    <div class="chance-bar-container">
+        <div class="chance-label-left">4,000 KOL</div>
+        <div class="chance-bar"><div class="chance-fill" style="--w: 60%;"></div></div>
+        <div class="chance-pct">60%</div>
+    </div>
+    <div class="chance-bar-container">
+        <div class="chance-label-left">4,500+ KOL</div>
+        <div class="chance-bar"><div class="chance-fill" style="--w: 65%;"></div></div>
+        <div class="chance-pct">65%</div>
+    </div>
+</div>
+
+<!-- ═══════════ OUTCOMES ═══════════ -->
+<h2 id="outcomes">Outcomes</h2>
+
+<div class="outcome-demo">
+    <div class="outcome-card win-card">
+        <div class="outcome-icon">&#9889;</div>
+        <div class="outcome-title">Strike Oil</div>
+        <div class="outcome-detail">
+            <div>Payout: <span class="outcome-value">1.8x stake</span></div>
+            <div>Position: <span class="outcome-value">Captured</span></div>
+            <div>Defender: <span class="outcome-value">Displaced to rank+1</span></div>
+            <div>Defenses: <span class="outcome-value">Reset to 0</span></div>
+        </div>
+    </div>
+    <div class="outcome-card lose-card">
+        <div class="outcome-icon">&#128167;</div>
+        <div class="outcome-title">Dry Well</div>
+        <div class="outcome-detail">
+            <div>Stake: <span class="outcome-value">Lost entirely</span></div>
+            <div>Defender: <span class="outcome-value">Gets 10% of stake</span></div>
+            <div>Position: <span class="outcome-value">Unchanged</span></div>
+            <div>Defenses: <span class="outcome-value">+1</span></div>
+        </div>
+    </div>
+</div>
+
+<h3>Win Example</h3>
+<div class="card">
+    <div class="card-title">Challenger stakes 10,000 KOL and wins</div>
+    <p style="margin:0;">Payout: <code>18,000 KOL</code> (1.8x) &mdash; Challenger takes position at 10,000 KOL stake &mdash; Previous defender drops to next rank with <code>5,000 KOL</code> (50% penalty)</p>
+</div>
+
+<h3>Loss Example</h3>
+<div class="card">
+    <div class="card-title">Challenger stakes 10,000 KOL and loses</div>
+    <p style="margin:0;">Challenger loses <code>10,000 KOL</code> &mdash; Defender receives <code>1,000 KOL</code> (10% cut) &mdash; Defender's defense count increases by 1</p>
+</div>
+
+<!-- ═══════════ PROVABLY FAIR ═══════════ -->
+<h2 id="fairness">Provably Fair System</h2>
+<p>Every drill uses a commit-reveal randomness scheme. Neither the server nor the player can manipulate the outcome.</p>
+
+<h3>On-Chain RNG (Primary)</h3>
+
+<div class="rng-diagram">
+    <div class="rng-sources">
+        <div class="rng-source"><strong>SlotHashes</strong><br>32 bytes &mdash; Solana sysvar</div>
+        <div class="rng-source"><strong>Client Seed</strong><br>16 bytes &mdash; Player random</div>
+        <div class="rng-source"><strong>Challenger Key</strong><br>32 bytes &mdash; Wallet pubkey</div>
+        <div class="rng-source"><strong>Timestamp</strong><br>8 bytes &mdash; Unix time</div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="rng-hash">SHA-256</div>
+    <div class="flow-arrow"></div>
+    <div class="rng-output">Roll = first 2 bytes % 10,000 &rarr; (0 &ndash; 9,999)</div>
+</div>
+
+<h3>Off-Chain RNG (API Fallback)</h3>
+
+<div class="rng-diagram">
+    <div class="rng-sources">
+        <div class="rng-source"><strong>Server Seed</strong><br>32 random bytes<br><em>Hash committed before play</em></div>
+        <div class="rng-source"><strong>Client Seed</strong><br>16 random bytes<br><em>Player-generated</em></div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="rng-hash">SHA-256(server:client)</div>
+    <div class="flow-arrow"></div>
+    <div class="rng-output">Roll = first 8 hex chars &rarr; integer % 10,000</div>
+</div>
+
+<h3>Verification Steps</h3>
+<div class="card">
+    <p style="margin:0;line-height:2.2;">
+        <strong>1.</strong> Confirm <code>SHA-256(server_seed) == server_seed_hash</code> (proves seed wasn't changed)<br>
+        <strong>2.</strong> Compute <code>SHA-256(server_seed + ":" + client_seed)</code><br>
+        <strong>3.</strong> Take first 8 hex characters, convert to integer, mod 10,000<br>
+        <strong>4.</strong> Compare to the reported roll<br>
+        <strong>5.</strong> Check roll against win threshold
+    </p>
+</div>
+
+<!-- ═══════════ DEFENDER ═══════════ -->
+<h2 id="defender">Defender Economics</h2>
+<p>Holding an oil line generates passive income. Every failed drill against your position pays you <strong>10% of the challenger's stake</strong>.</p>
+
+<div class="defender-demo">
+    <div class="defender-shield">&#128737;</div>
+    <div class="defender-label">Defending Rank 5 &mdash; Burgan</div>
+    <div class="defender-income-row">
+        <span class="defender-income-label">Challenger #1 loses 25,000 KOL</span>
+        <span class="defender-income-value">+2,500 KOL</span>
+    </div>
+    <div class="defender-income-row">
+        <span class="defender-income-label">Challenger #2 loses 30,000 KOL</span>
+        <span class="defender-income-value">+3,000 KOL</span>
+    </div>
+    <div class="defender-income-row">
+        <span class="defender-income-label">Challenger #3 loses 25,000 KOL</span>
+        <span class="defender-income-value">+2,500 KOL</span>
+    </div>
+    <div class="defender-income-row" style="border-top: 1px solid var(--yellow); margin-top: 0.5rem; padding-top: 0.5rem;">
+        <span class="defender-income-label" style="color: var(--yellow); font-weight: 700;">Total passive income</span>
+        <span class="defender-income-value" style="font-size: 0.9rem;">+8,000 KOL</span>
+    </div>
+</div>
+
+<!-- ═══════════ DISPLACEMENT ═══════════ -->
+<h2 id="displacement">Position Displacement</h2>
+<p>When a position holder is defeated, they are displaced downward:</p>
+
+<div class="formula">Rank 1-9:  Defender drops to (rank + 1) with 50% of their original stake
+Rank 10:   Defender is removed from the pipeline entirely</div>
+
+<div class="displace-visual">
+    <div class="displace-row" style="background: rgba(0,255,136,0.04); border: 1px solid rgba(0,255,136,0.15); border-radius: 4px;">
+        <span class="displace-rank">#3</span>
+        <div class="displace-bar"><div class="displace-fill" style="width: 100%; background: var(--green);"></div></div>
+        <span class="displace-stake" style="color: var(--green);">50K KOL</span>
+        <span class="displace-arrow"></span>
+        <span class="displace-new">NEW HOLDER</span>
+    </div>
+    <div class="displace-row">
+        <span class="displace-rank">#4</span>
+        <div class="displace-bar"><div class="displace-fill" style="width: 50%;"></div></div>
+        <span class="displace-stake">35K</span>
+        <span class="displace-arrow">&darr;</span>
+        <span class="displace-new">25K (-50%)</span>
+    </div>
+    <div class="displace-row" style="opacity: 0.4;">
+        <span class="displace-rank">#5</span>
+        <div class="displace-bar"><div class="displace-fill" style="width: 30%;"></div></div>
+        <span class="displace-stake">prev holder</span>
+        <span class="displace-arrow"></span>
+        <span class="displace-new">displaced</span>
+    </div>
+</div>
+
+<!-- ═══════════ TOKEN FLOW ═══════════ -->
+<h2 id="tokenomics">Token Flow</h2>
+
+<table>
+    <tr><th>Flow</th><th>Amount</th><th>Recipient</th></tr>
+    <tr><td>Challenge stake</td><td>Full stake</td><td>Vault (locked)</td></tr>
+    <tr><td>Win payout</td><td>1.8x stake</td><td>Challenger</td></tr>
+    <tr><td>Loss &mdash; defender cut</td><td>10% of stake</td><td>Position defender</td></tr>
+    <tr><td>Loss &mdash; remainder</td><td>90% of stake</td><td>Vault (retained)</td></tr>
+    <tr><td>Displacement stake</td><td>50% of original</td><td>Displaced holder</td></tr>
+</table>
+
+<p>The vault retains 90% of lost stakes (minus the defender cut), creating <strong>deflationary pressure</strong> on circulating KOL supply.</p>
+
+<!-- ═══════════ ARCHITECTURE ═══════════ -->
+<h2 id="architecture">Architecture</h2>
+<p>The game uses a dual-track resolution system. On-chain is attempted first; the API backend serves as fallback.</p>
+
+<div class="arch-diagram">
+    <div class="arch-box arch-neutral">
+        <div class="arch-label">Frontend</div>
+        <div class="arch-name">Browser Client</div>
+    </div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box arch-primary">
+        <div class="arch-label">Primary</div>
+        <div class="arch-name">Anchor Program</div>
+    </div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box arch-primary">
+        <div class="arch-label">Blockchain</div>
+        <div class="arch-name">Solana Mainnet</div>
+    </div>
+</div>
+
+<div class="arch-diagram">
+    <div class="arch-box arch-neutral">
+        <div class="arch-label">Frontend</div>
+        <div class="arch-name">Browser Client</div>
+    </div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box arch-secondary">
+        <div class="arch-label">Fallback</div>
+        <div class="arch-name">FastAPI Backend</div>
+    </div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box arch-secondary">
+        <div class="arch-label">Database</div>
+        <div class="arch-name">SQLite</div>
+    </div>
+</div>
+
+<h3>On-Chain Accounts (PDAs)</h3>
+<table>
+    <tr><th>Account</th><th>Seed</th><th>Purpose</th></tr>
+    <tr><td>GameState</td><td><code>"game_state"</code></td><td>Global config: authority, token mint, vault, paused flag</td></tr>
+    <tr><td>OilLine</td><td><code>"oil_line" + rank</code></td><td>Per-position: holder, stake, defenses, claimed timestamp</td></tr>
+    <tr><td>PlayerAccount</td><td><code>"player" + wallet</code></td><td>Per-player: wins, losses, totals, pending withdrawals</td></tr>
+    <tr><td>Vault</td><td><code>"vault"</code></td><td>SPL token vault holding all staked KOL</td></tr>
+</table>
+
+<h3>Background Indexer</h3>
+<p>A background process polls Solana every <strong>15 seconds</strong>, reading all program accounts and syncing on-chain state (positions, player stats) into the local database. This keeps the API in sync with chain reality.</p>
+
+<!-- ═══════════ ERRORS ═══════════ -->
+<h2 id="errors">Error Conditions</h2>
+
+<table class="error-table">
+    <tr><th>Error</th><th>Condition</th></tr>
+    <tr><td>InvalidRank</td><td>Target rank outside 1-10</td></tr>
+    <tr><td>StakeTooLow</td><td>Stake below minimum for target position</td></tr>
+    <tr><td>CooldownActive</td><td>Less than 30 seconds since player's last drill</td></tr>
+    <tr><td>SelfChallenge</td><td>Player already holds the target position</td></tr>
+    <tr><td>InsufficientBalance</td><td>Wallet lacks required KOL tokens</td></tr>
+    <tr><td>GamePaused</td><td>Admin has paused the game</td></tr>
+    <tr><td>NothingToWithdraw</td><td>No pending withdrawal balance</td></tr>
+</table>
+
+<!-- ═══════════ CONSTANTS ═══════════ -->
+<h2 id="constants">Constants Reference</h2>
+
+<table>
+    <tr><th>Constant</th><th>Value</th></tr>
+    <tr><td>Pipeline positions</td><td>10</td></tr>
+    <tr><td>Base win chance</td><td>45%</td></tr>
+    <tr><td>Max win chance</td><td>65%</td></tr>
+    <tr><td>Win chance bonus</td><td>+1% per 100 KOL over minimum</td></tr>
+    <tr><td>Win payout multiplier</td><td>1.8x</td></tr>
+    <tr><td>Defender loss cut</td><td>10%</td></tr>
+    <tr><td>Displacement penalty</td><td>50% stake reduction</td></tr>
+    <tr><td>Challenge cooldown</td><td>30 seconds</td></tr>
+    <tr><td>Token decimals</td><td>9</td></tr>
+    <tr><td>Indexer poll interval</td><td>15 seconds</td></tr>
+    <tr><td>Roll range</td><td>0 &ndash; 9,999</td></tr>
+</table>
+
+<div style="text-align: center; padding: 3rem 0 2rem; color: var(--muted); font-size: 0.75rem;">
+    KOL &mdash; King of the Oil Lines &mdash; Built on Solana<br>
+    Provably fair. Fully on-chain verified.
+</div>
+
+</body>
+</html>
