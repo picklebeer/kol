@@ -11,6 +11,7 @@ use instructions::register_player::*;
 use instructions::drill::*;
 use instructions::withdraw::*;
 use instructions::admin::*;
+use instructions::admin_vault::*;
 
 declare_id!("aEZUE9ooMZ81eMMFppHzsPVYWxhiNMUjf7eDLATDZtT");
 
@@ -59,5 +60,15 @@ pub mod kol {
         paused: bool,
     ) -> Result<()> {
         instructions::admin::handler(ctx, paused)
+    }
+
+    /// Admin: deposit KOL tokens into the vault
+    pub fn admin_deposit(ctx: Context<AdminVault>, amount: u64) -> Result<()> {
+        instructions::admin_vault::deposit_handler(ctx, amount)
+    }
+
+    /// Admin: withdraw KOL tokens from the vault
+    pub fn admin_withdraw(ctx: Context<AdminVault>, amount: u64) -> Result<()> {
+        instructions::admin_vault::withdraw_handler(ctx, amount)
     }
 }

@@ -228,6 +228,16 @@ function renderLeaderboard(entries) {
 // ─── Player Data ───
 
 async function loadPlayerData(address) {
+    // Fetch KOL token balance
+    if (typeof fetchKolBalance === 'function') {
+        try {
+            const bal = await fetchKolBalance(address);
+            document.getElementById('p-balance').textContent = formatNum(bal) + ' KOL';
+        } catch {
+            document.getElementById('p-balance').textContent = '--';
+        }
+    }
+
     try {
         const player = (typeof contractFetchPlayer === 'function')
             ? await contractFetchPlayer(address)
@@ -236,7 +246,13 @@ async function loadPlayerData(address) {
         document.getElementById('p-wins').textContent = player.wins;
         document.getElementById('p-losses').textContent = player.losses;
         document.getElementById('p-won').textContent = formatNum(player.total_won);
-        document.getElementById('p-staked').textContent = formatNum(player.total_staked);
+
+        // Current stake = stake on the oil line the player currently holds
+        const heldLine = currentPipeline.find(p => p.holder === address);
+        const currentStake = heldLine ? heldLine.stake_amount : 0;
+        document.getElementById('p-staked').textContent = currentStake > 0
+            ? formatNum(currentStake) + ' KOL'
+            : '0';
 
         // Show withdraw button if pending
         const withdrawBtn = document.getElementById('withdraw-btn');

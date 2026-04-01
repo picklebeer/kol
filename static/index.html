@@ -90,6 +90,67 @@
 
         .landing-cta .btn { padding: 0.85rem 2.5rem; font-size: 0.95rem; }
 
+        /* ─── CA Field ─── */
+        .ca-field {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+            user-select: all;
+        }
+
+        .ca-field:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .ca-label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        .ca-value {
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            letter-spacing: 0.02em;
+        }
+
+        .ca-copy-icon {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .ca-field:hover .ca-copy-icon { color: var(--neon-cyan); }
+
+        .ca-copied {
+            position: absolute;
+            top: -1.8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .ca-value { font-size: 0.55rem; }
+            .ca-field { padding: 0.5rem 0.8rem; gap: 0.4rem; }
+        }
+
         /* ─── Features ─── */
         .features {
             max-width: 1000px;
@@ -1296,6 +1357,12 @@
         The Solana token that fuels the pipeline. Stake KOL to drill into ranked
         oil lines. Claim the richest routes. Defend your territory. Extract rewards.
     </p>
+    <div class="ca-field" onclick="navigator.clipboard.writeText('8w48v3SxPqZWBgAWCPf7muTckPu5cP5UvJQ2ta8rt71s').then(()=>{this.querySelector('.ca-copied').style.opacity=1;setTimeout(()=>this.querySelector('.ca-copied').style.opacity=0,1500)})">
+        <span class="ca-label">CA:</span>
+        <span class="ca-value">8w48v3SxPqZWBgAWCPf7muTckPu5cP5UvJQ2ta8rt71s</span>
+        <span class="ca-copy-icon">&#x2398;</span>
+        <span class="ca-copied">Copied!</span>
+    </div>
     <div class="landing-cta">
         <a href="/app" class="btn btn-glow">Start Drilling</a>
         <a href="#how" class="btn btn-primary">Learn More</a>

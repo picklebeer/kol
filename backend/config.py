@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     challenge_cooldown_seconds: int = 30
     cache_ttl_seconds: int = 30
     program_id: str = "aEZUE9ooMZ81eMMFppHzsPVYWxhiNMUjf7eDLATDZtT"
+    game_enabled: bool = False
 
     class Config:
         env_file = Path(__file__).parent.parent / ".env"

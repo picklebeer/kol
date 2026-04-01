@@ -54,6 +54,11 @@ async def health():
     return {"status": "ok", "game": "KOL - King of the Oil Lines"}
 
 
+@app.get("/api/game-status")
+async def game_status():
+    return {"enabled": settings.game_enabled}
+
+
 # ──────────────────────────── Token ─────────────────────────────
 
 @app.get("/api/token-info")

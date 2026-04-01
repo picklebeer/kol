@@ -81,6 +81,10 @@
         <!-- ═══════════ PLAYER PANEL ═══════════ -->
         <div class="player-panel" id="player-panel" style="display: none">
             <div class="section-title">Your Stats</div>
+            <div class="card balance-card" style="padding: 0.75rem 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                <div class="card-header" style="margin-bottom: 0; font-size: 0.7rem;">KOL Balance</div>
+                <div class="card-value" id="p-balance" style="color: var(--neon-yellow); font-size: 1.4rem;">--</div>
+            </div>
             <div class="player-stats">
                 <div class="card">
                     <div class="card-header">Wins</div>
@@ -107,7 +111,7 @@
                     <div class="card-value" id="p-won">0</div>
                 </div>
                 <div class="card">
-                    <div class="card-header">Total Staked</div>
+                    <div class="card-header">Current Stake</div>
                     <div class="card-value" id="p-staked">0</div>
                 </div>
             </div>
@@ -233,6 +237,15 @@
             </div>
         </div>
 
+        <!-- ═══════════ MAINTENANCE MODAL ═══════════ -->
+        <div id="maintenance-modal" style="display:none">
+            <div class="maintenance-content">
+                <img src="/static/img/oilking.png" alt="Oil King" class="maintenance-mascot" />
+                <h2 class="maintenance-title">Mainnet configuration in progress.</h2>
+                <p class="maintenance-sub">The oil fields will open soon.</p>
+            </div>
+        </div>
+
         <!-- ═══════════ FOOTER ═══════════ -->
         <footer class="footer">
             <p>KOL &mdash; King of the Oil Lines &mdash; Built on Solana</p>
@@ -241,6 +254,19 @@
             </p>
         </footer>
 
+        <script>
+            (async function checkGameStatus() {
+                try {
+                    const res = await fetch('/api/game-status');
+                    const data = await res.json();
+                    if (!data.enabled) {
+                        document.getElementById('maintenance-modal').style.display = 'flex';
+                    }
+                } catch (e) {
+                    document.getElementById('maintenance-modal').style.display = 'flex';
+                }
+            })();
+        </script>
         <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
         <script>
             window.solanaWeb3 = window.solanaWeb3 || solanaWeb3;

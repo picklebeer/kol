@@ -473,4 +473,22 @@ async function contractWithdraw() {
     return await signAndSendTransaction(tx);
 }
 
+// ─── Token Balance ───
+
+async function fetchKolBalance(address) {
+    try {
+        const conn = getSolConnection();
+        const walletPubkey = new solanaWeb3.PublicKey(address);
+        const [gameStatePDA] = await findGameStatePDA();
+        const gameInfo = await conn.getAccountInfo(gameStatePDA);
+        const gameState = deserializeGameState(new Uint8Array(gameInfo.data));
+        const tokenMint = new solanaWeb3.PublicKey(gameState.tokenMint);
+        const ata = await getAssociatedTokenAddress(walletPubkey, tokenMint);
+        const balance = await conn.getTokenAccountBalance(ata);
+        return Number(balance.value.uiAmount);
+    } catch {
+        return 0;
+    }
+}
+
 console.log('[KOL Contract] Client loaded. Program:', PROGRAM_ID.toBase58());
