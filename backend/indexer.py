@@ -158,11 +158,13 @@ async def sync_on_chain_state():
                 existing = await db.get_player(player["address"])
                 if not existing:
                     await db.create_player(player["address"])
-                await db.update_player_stats(
+                await db.sync_player_from_chain(
                     address=player["address"],
-                    won=player["wins"] > (existing["wins"] if existing else 0),
-                    stake_amount=0,
-                    payout=0,
+                    wins=player["wins"],
+                    losses=player["losses"],
+                    total_won=player["total_won"],
+                    total_staked=player["total_staked"],
+                    pending_withdraw=player["pending_withdraw"],
                 )
                 player_count += 1
 

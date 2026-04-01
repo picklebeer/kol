@@ -108,6 +108,25 @@ async def update_player_stats(address: str, staked: float, won: float, lost: flo
         await db.close()
 
 
+async def sync_player_from_chain(
+    address: str, wins: int, losses: int,
+    total_won: float, total_staked: float, pending_withdraw: float
+):
+    """Overwrite player stats with authoritative on-chain values."""
+    db = await get_db()
+    try:
+        await db.execute(
+            """UPDATE players SET
+                wins = ?, losses = ?,
+                total_won = ?, total_staked = ?
+            WHERE address = ?""",
+            (wins, losses, total_won, total_staked, address),
+        )
+        await db.commit()
+    finally:
+        await db.close()
+
+
 async def get_ladder() -> List[dict]:
     db = await get_db()
     try:
