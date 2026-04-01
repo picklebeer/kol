@@ -18,20 +18,23 @@ pub const DEFENDER_CUT_DENOMINATOR: u64 = 10;
 /// Challenge cooldown in seconds
 pub const COOLDOWN_SECONDS: i64 = 30;
 
-/// Minimum stakes per rank (1-indexed). Amounts in token base units (with 9 decimals).
+/// Minimum stakes per rank (1-indexed). Amounts in token base units (with 6 decimals).
 /// Rank 1: 100,000 KOL, Rank 2: 75,000, ..., Rank 10: 2,500
 pub const MIN_STAKES: [u64; 10] = [
-    100_000_000_000_000, // Rank 1:  100,000 KOL — Ghawar
-     75_000_000_000_000, // Rank 2:   75,000 KOL — Kirkuk-Ceyhan
-     50_000_000_000_000, // Rank 3:   50,000 KOL — Trans-Arabian
-     35_000_000_000_000, // Rank 4:   35,000 KOL — Abqaiq
-     25_000_000_000_000, // Rank 5:   25,000 KOL — Burgan
-     15_000_000_000_000, // Rank 6:   15,000 KOL — Marib
-     10_000_000_000_000, // Rank 7:   10,000 KOL — Dura Europos
-      7_500_000_000_000, // Rank 8:    7,500 KOL — Bab al-Mandeb
-      5_000_000_000_000, // Rank 9:    5,000 KOL — Sidon
-      2_500_000_000_000, // Rank 10:   2,500 KOL — Dilmun
+    100_000_000_000, // Rank 1:  100,000 KOL — Ghawar
+     75_000_000_000, // Rank 2:   75,000 KOL — Kirkuk-Ceyhan
+     50_000_000_000, // Rank 3:   50,000 KOL — Trans-Arabian
+     35_000_000_000, // Rank 4:   35,000 KOL — Abqaiq
+     25_000_000_000, // Rank 5:   25,000 KOL — Burgan
+     15_000_000_000, // Rank 6:   15,000 KOL — Marib
+     10_000_000_000, // Rank 7:   10,000 KOL — Dura Europos
+      7_500_000_000, // Rank 8:    7,500 KOL — Bab al-Mandeb
+      5_000_000_000, // Rank 9:    5,000 KOL — Sidon
+      2_500_000_000, // Rank 10:   2,500 KOL — Dilmun
 ];
+
+/// Token decimals for transfer_checked
+pub const TOKEN_DECIMALS: u8 = 6;
 
 /// PDA seeds
 pub const GAME_STATE_SEED: &[u8] = b"game_state";

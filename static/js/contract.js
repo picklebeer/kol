@@ -6,8 +6,8 @@
 // Falls back to backend API if on-chain calls fail.
 
 // Program ID — replace with actual deployed address
-const PROGRAM_ID = new solanaWeb3.PublicKey('aEZUE9ooMZ81eMMFppHzsPVYWxhiNMUjf7eDLATDZtT');
-const TOKEN_DECIMALS = 9;
+const PROGRAM_ID = new solanaWeb3.PublicKey('AB78g7yHF2EdZ3uhBdsPuxSkxm2SykW4RYTCuivmKJcx');
+const TOKEN_DECIMALS = 6;
 
 // PDA seeds (must match Anchor program)
 const GAME_STATE_SEED = new TextEncoder().encode('game_state');
@@ -32,7 +32,7 @@ let solConnection = null;
 function getSolConnection() {
     if (!solConnection) {
         // Default to mainnet; can be overridden
-        const rpcUrl = window.KOL_RPC_URL || 'https://api.devnet.solana.com';
+        const rpcUrl = window.KOL_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=d30179d2-f443-48a3-8284-566418c3f46d';
         solConnection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
     }
     return solConnection;
@@ -250,7 +250,7 @@ async function buildDrillTx(walletPubkey, rank, stakeAmount, clientSeed) {
     dataArr.set(clientSeed, 17);
 
     const SLOT_HASHES_SYSVAR = new solanaWeb3.PublicKey('SysvarS1otHashes111111111111111111111111111');
-    const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    const TOKEN_2022_PROGRAM_ID = new solanaWeb3.PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb');
 
     const keys = [
         { pubkey: walletPubkey, isSigner: true, isWritable: true },
@@ -268,10 +268,11 @@ async function buildDrillTx(walletPubkey, rank, stakeAmount, clientSeed) {
     }
 
     keys.push(
+        { pubkey: tokenMint, isSigner: false, isWritable: false },
         { pubkey: challengerATA, isSigner: false, isWritable: true },
         { pubkey: vaultPDA, isSigner: false, isWritable: true },
         { pubkey: SLOT_HASHES_SYSVAR, isSigner: false, isWritable: false },
-        { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+        { pubkey: TOKEN_2022_PROGRAM_ID, isSigner: false, isWritable: false },
     );
 
     const ix = new solanaWeb3.TransactionInstruction({
@@ -298,15 +299,16 @@ async function buildWithdrawTx(walletPubkey) {
     const playerATA = await getAssociatedTokenAddress(walletPubkey, tokenMint);
 
     const disc = await anchorDiscriminator('withdraw');
-    const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    const TOKEN_2022_PROGRAM_ID = new solanaWeb3.PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb');
 
     const keys = [
         { pubkey: walletPubkey, isSigner: true, isWritable: true },
         { pubkey: gameStatePDA, isSigner: false, isWritable: false },
         { pubkey: playerPDA, isSigner: false, isWritable: true },
+        { pubkey: tokenMint, isSigner: false, isWritable: false },
         { pubkey: playerATA, isSigner: false, isWritable: true },
         { pubkey: vaultPDA, isSigner: false, isWritable: true },
-        { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+        { pubkey: TOKEN_2022_PROGRAM_ID, isSigner: false, isWritable: false },
     ];
 
     const ix = new solanaWeb3.TransactionInstruction({
@@ -325,12 +327,12 @@ async function buildWithdrawTx(walletPubkey) {
 
 async function getAssociatedTokenAddress(walletPubkey, mintPubkey) {
     const ASSOCIATED_TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
-    const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    const TOKEN_2022_PROGRAM_ID = new solanaWeb3.PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb');
 
     const [ata] = solanaWeb3.PublicKey.findProgramAddressSync(
         [
             walletPubkey.toBytes(),
-            TOKEN_PROGRAM_ID.toBytes(),
+            TOKEN_2022_PROGRAM_ID.toBytes(),
             mintPubkey.toBytes(),
         ],
         ASSOCIATED_TOKEN_PROGRAM_ID

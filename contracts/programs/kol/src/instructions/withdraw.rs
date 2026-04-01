@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_spl::token_interface::{self, Mint, TokenAccount, TokenInterface, TransferChecked};
 
 use crate::constants::*;
 use crate::errors::KolError;
@@ -18,17 +18,19 @@ pub fn handler(ctx: Context<Withdraw>) -> Result<()> {
     let seeds = &[GAME_STATE_SEED, &[game_bump]];
     let signer_seeds = &[&seeds[..]];
 
-    token::transfer(
+    token_interface::transfer_checked(
         CpiContext::new_with_signer(
             ctx.accounts.token_program.to_account_info(),
-            Transfer {
+            TransferChecked {
                 from: ctx.accounts.vault.to_account_info(),
+                mint: ctx.accounts.token_mint.to_account_info(),
                 to: ctx.accounts.player_token.to_account_info(),
                 authority: ctx.accounts.game_state.to_account_info(),
             },
             signer_seeds,
         ),
         amount,
+        TOKEN_DECIMALS,
     )?;
 
     msg!("Withdrew {} tokens to {}", amount, ctx.accounts.player.key());
@@ -54,12 +56,15 @@ pub struct Withdraw<'info> {
     )]
     pub player_account: Account<'info, PlayerAccount>,
 
+    #[account(address = game_state.token_mint)]
+    pub token_mint: InterfaceAccount<'info, Mint>,
+
     #[account(
         mut,
         token::mint = game_state.token_mint,
         token::authority = player,
     )]
-    pub player_token: Account<'info, TokenAccount>,
+    pub player_token: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         mut,
@@ -68,7 +73,7 @@ pub struct Withdraw<'info> {
         token::mint = game_state.token_mint,
         token::authority = game_state,
     )]
-    pub vault: Account<'info, TokenAccount>,
+    pub vault: InterfaceAccount<'info, TokenAccount>,
 
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
 }

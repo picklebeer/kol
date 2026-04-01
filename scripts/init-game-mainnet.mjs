@@ -11,7 +11,7 @@ import path from "path";
 
 const PROGRAM_ID = new PublicKey("AB78g7yHF2EdZ3uhBdsPuxSkxm2SykW4RYTCuivmKJcx");
 const TOKEN_MINT = new PublicKey("B1NeyU5Yjpk2qEnFf1QXPsmPwTbY5iFfwegVnJcopump");
-const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+const TOKEN_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
 const RPC = "https://mainnet.helius-rpc.com/?api-key=d30179d2-f443-48a3-8284-566418c3f46d";
 
 const GAME_STATE_SEED = Buffer.from("game_state");

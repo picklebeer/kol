@@ -28,4 +28,7 @@ pub enum KolError {
 
     #[msg("Nothing to withdraw")]
     NothingToWithdraw,
+
+    #[msg("Invalid defender account for this oil line")]
+    InvalidDefender,
 }

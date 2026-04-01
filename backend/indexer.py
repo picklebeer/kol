@@ -13,8 +13,8 @@ import httpx
 from config import settings
 import database as db
 
-# Program ID — must match deployed contract
-PROGRAM_ID = "aEZUE9ooMZ81eMMFppHzsPVYWxhiNMUjf7eDLATDZtT"
+# Program ID — read from settings so it follows the env file
+PROGRAM_ID = settings.program_id
 
 # Account discriminators (first 8 bytes of SHA-256("account:<AccountName>"))
 # These are pre-computed for Anchor account types
@@ -89,7 +89,7 @@ def decode_oil_line(data: bytes) -> Optional[dict]:
         return {
             "rank": rank,
             "holder": holder,
-            "stake_amount": stake_amount / 1e9,  # Convert from base units
+            "stake_amount": stake_amount / 1e6,  # Convert from base units
             "defenses": defenses,
             "claimed_at": claimed_at,
         }
@@ -118,10 +118,10 @@ def decode_player(data: bytes) -> Optional[dict]:
             "address": authority,
             "wins": wins,
             "losses": losses,
-            "total_won": total_won / 1e9,
-            "total_staked": total_staked / 1e9,
+            "total_won": total_won / 1e6,
+            "total_staked": total_staked / 1e6,
             "last_challenge_at": last_challenge_at,
-            "pending_withdraw": pending_withdraw / 1e9,
+            "pending_withdraw": pending_withdraw / 1e6,
         }
     except Exception as e:
         print(f"[Indexer] Failed to decode Player: {e}")

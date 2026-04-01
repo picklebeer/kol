@@ -16,7 +16,12 @@ class Settings(BaseSettings):
     game_enabled: bool = False
 
     class Config:
-        env_file = Path(__file__).parent.parent / ".env"
+        env_file = (
+            Path(__file__).parent.parent / ".env.production"
+            if (Path(__file__).parent.parent / ".env.production").exists()
+               and __import__("os").environ.get("ENV", "").lower() == "production"
+            else Path(__file__).parent.parent / ".env"
+        )
 
 
 settings = Settings()

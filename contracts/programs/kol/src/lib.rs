@@ -13,7 +13,7 @@ use instructions::withdraw::*;
 use instructions::admin::*;
 use instructions::admin_vault::*;
 
-declare_id!("aEZUE9ooMZ81eMMFppHzsPVYWxhiNMUjf7eDLATDZtT");
+declare_id!("AB78g7yHF2EdZ3uhBdsPuxSkxm2SykW4RYTCuivmKJcx");
 
 #[program]
 pub mod kol {

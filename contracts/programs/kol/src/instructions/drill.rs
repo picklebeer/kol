@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::hash::hash;
 use anchor_lang::solana_program::sysvar::slot_hashes;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_spl::token_interface::{self, Mint, TokenAccount, TokenInterface, TransferChecked};
 
 use crate::constants::*;
 use crate::errors::KolError;
@@ -34,17 +34,34 @@ pub fn handler(ctx: Context<Drill>, rank: u8, stake_amount: u64, client_seed: [u
         KolError::SelfChallenge
     );
 
+    // Validate defender account matches the oil line holder
+    if oil_line.holder != Pubkey::default() {
+        // Position is held — defender account MUST be provided and must be the holder's PDA
+        let defender = ctx.accounts.defender_account.as_ref()
+            .ok_or(KolError::InvalidDefender)?;
+        require!(defender.authority == oil_line.holder, KolError::InvalidDefender);
+
+        // Verify it's the correct PDA
+        let (expected_pda, _) = Pubkey::find_program_address(
+            &[PLAYER_SEED, oil_line.holder.as_ref()],
+            ctx.program_id,
+        );
+        require!(defender.key() == expected_pda, KolError::InvalidDefender);
+    }
+
     // Transfer stake from challenger to vault
-    token::transfer(
+    token_interface::transfer_checked(
         CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
-            Transfer {
+            TransferChecked {
                 from: ctx.accounts.challenger_token.to_account_info(),
+                mint: ctx.accounts.token_mint.to_account_info(),
                 to: ctx.accounts.vault.to_account_info(),
                 authority: ctx.accounts.challenger.to_account_info(),
             },
         ),
         stake_amount,
+        TOKEN_DECIMALS,
     )?;
 
     // ─── Provably-Fair RNG ───
@@ -69,7 +86,7 @@ pub fn handler(ctx: Context<Drill>, rank: u8, stake_amount: u64, client_seed: [u
     let roll = u16::from_le_bytes([seed_hash.to_bytes()[0], seed_hash.to_bytes()[1]]) % 10000;
 
     // Calculate win threshold (45% base + 1% per 100 KOL over minimum, max 65%)
-    let bonus_units = stake_amount.saturating_sub(min_stake) / (100_000_000_000); // per 100 KOL (9 decimals)
+    let bonus_units = stake_amount.saturating_sub(min_stake) / (100_000_000); // per 100 KOL (6 decimals)
     let bonus_bp = (bonus_units as u16).min(MAX_WIN_CHANCE - BASE_WIN_CHANCE);
     let win_threshold = BASE_WIN_CHANCE + bonus_bp;
     let win = roll < win_threshold;
@@ -187,12 +204,15 @@ pub struct Drill<'info> {
     #[account(mut)]
     pub defender_account: Option<Account<'info, PlayerAccount>>,
 
+    #[account(address = game_state.token_mint)]
+    pub token_mint: InterfaceAccount<'info, Mint>,
+
     #[account(
         mut,
         token::mint = game_state.token_mint,
         token::authority = challenger,
     )]
-    pub challenger_token: Account<'info, TokenAccount>,
+    pub challenger_token: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         mut,
@@ -201,12 +221,12 @@ pub struct Drill<'info> {
         token::mint = game_state.token_mint,
         token::authority = game_state,
     )]
-    pub vault: Account<'info, TokenAccount>,
+    pub vault: InterfaceAccount<'info, TokenAccount>,
 
     /// SlotHashes sysvar for on-chain RNG
     /// CHECK: Validated by address constraint
     #[account(address = slot_hashes::id())]
     pub slot_hashes: AccountInfo<'info>,
 
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
 }
