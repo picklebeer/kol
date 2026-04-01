@@ -16,11 +16,10 @@ import database as db
 # Program ID — read from settings so it follows the env file
 PROGRAM_ID = settings.program_id
 
-# Account discriminators (first 8 bytes of SHA-256("account:<AccountName>"))
-# These are pre-computed for Anchor account types
-GAME_STATE_DISC = None  # Will be computed on first run
-OIL_LINE_DISC = None
-PLAYER_DISC = None
+# Anchor account discriminators (first 8 bytes of SHA-256("account:<Name>"))
+GAME_STATE_DISC = bytes([144, 94, 208, 172, 248, 99, 134, 120])
+OIL_LINE_DISC = bytes([197, 144, 33, 246, 179, 59, 78, 119])
+PLAYER_DISC = bytes([224, 184, 224, 50, 98, 72, 48, 236])
 
 POLL_INTERVAL = 15  # seconds
 
@@ -69,7 +68,7 @@ async def fetch_account(rpc_url: str, address: str) -> Optional[dict]:
 
 def decode_oil_line(data: bytes) -> Optional[dict]:
     """Decode an OilLine account from raw bytes."""
-    if len(data) < 62:  # 8 disc + 1 rank + 32 holder + 8 stake + 4 defenses + 8 claimed_at + 1 bump
+    if len(data) < 62 or data[:8] != OIL_LINE_DISC:
         return None
 
     try:
@@ -100,7 +99,7 @@ def decode_oil_line(data: bytes) -> Optional[dict]:
 
 def decode_player(data: bytes) -> Optional[dict]:
     """Decode a PlayerAccount from raw bytes."""
-    if len(data) < 81:  # 8 + 32 + 4 + 4 + 8 + 8 + 8 + 8 + 1
+    if len(data) < 81 or data[:8] != PLAYER_DISC:
         return None
 
     try:
@@ -141,32 +140,36 @@ async def sync_on_chain_state():
 
             raw = base64.b64decode(acct["account"]["data"][0])
 
-            # Try to decode as OilLine (check data length)
-            oil_line = decode_oil_line(raw)
-            if oil_line and 1 <= oil_line["rank"] <= 10:
-                await db.set_ladder_position(
-                    rank=oil_line["rank"],
-                    holder=oil_line["holder"],
-                    stake_amount=oil_line["stake_amount"],
-                )
-                oil_line_count += 1
-                continue
+            # Use discriminator to identify account type
+            disc = raw[:8] if len(raw) >= 8 else b""
 
-            # Try to decode as Player
-            player = decode_player(raw)
-            if player and player["address"]:
-                existing = await db.get_player(player["address"])
-                if not existing:
-                    await db.create_player(player["address"])
-                await db.sync_player_from_chain(
-                    address=player["address"],
-                    wins=player["wins"],
-                    losses=player["losses"],
-                    total_won=player["total_won"],
-                    total_staked=player["total_staked"],
-                    pending_withdraw=player["pending_withdraw"],
-                )
-                player_count += 1
+            if disc == OIL_LINE_DISC:
+                oil_line = decode_oil_line(raw)
+                if oil_line and 1 <= oil_line["rank"] <= 10:
+                    await db.set_ladder_position(
+                        rank=oil_line["rank"],
+                        holder=oil_line["holder"],
+                        stake_amount=oil_line["stake_amount"],
+                    )
+                    oil_line_count += 1
+
+            elif disc == PLAYER_DISC:
+                player = decode_player(raw)
+                if player and player["address"]:
+                    existing = await db.get_player(player["address"])
+                    if not existing:
+                        await db.create_player(player["address"])
+                    await db.sync_player_from_chain(
+                        address=player["address"],
+                        wins=player["wins"],
+                        losses=player["losses"],
+                        total_won=player["total_won"],
+                        total_staked=player["total_staked"],
+                        pending_withdraw=player["pending_withdraw"],
+                    )
+                    player_count += 1
+
+            # Skip GameState and any other account types
 
         if oil_line_count > 0 or player_count > 0:
             print(f"[Indexer] Synced {oil_line_count} oil lines, {player_count} players")
