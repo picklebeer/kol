@@ -1,5 +1,8 @@
+import os
 from pydantic_settings import BaseSettings
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
@@ -16,11 +19,14 @@ class Settings(BaseSettings):
     game_enabled: bool = False
 
     class Config:
+        # In production, deploy.sh copies .env.production → .env
+        # Locally, use .env.production if ENV=production, else .env
+        _prod = PROJECT_ROOT / ".env.production"
+        _dev = PROJECT_ROOT / ".env"
         env_file = (
-            Path(__file__).parent.parent / ".env.production"
-            if (Path(__file__).parent.parent / ".env.production").exists()
-               and __import__("os").environ.get("ENV", "").lower() == "production"
-            else Path(__file__).parent.parent / ".env"
+            _prod
+            if os.environ.get("ENV", "").lower() == "production" and _prod.exists()
+            else _dev
         )
 
 
